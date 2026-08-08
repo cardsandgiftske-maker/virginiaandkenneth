@@ -1,21 +1,20 @@
-# Virginia & Kenneth Wedding Minisite
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
 
-A responsive traditional-wedding invitation minisite inspired by the supplied invitation.
+# Run and deploy your AI Studio app
 
-## Included
-- Responsive landing/hero section
-- Couple names and traditional wedding styling
-- Countdown to 3 October 2026 at 10:00 AM (EAT)
-- Venue/date/time section
-- Invitation artwork used as the visual reference
-- Gifting note
-- RSVP form that opens WhatsApp with the submitted details
-- WhatsApp floating RSVP button
-- Open Graph metadata for social sharing
+This contains everything you need to run your app locally.
 
-## Important
-The RSVP currently sends the form details to WhatsApp number 0741912468 (Kenya +254 741 912 468).
-For a production version, replace the WhatsApp RSVP with your Firebase/Firestore + Resend setup so RSVPs are stored centrally and confirmation emails can be sent automatically.
+View your app in AI Studio: https://ai.studio/apps/559019cb-3562-4fb8-bd80-738c8f229f65
 
-## Run
-Open index.html in a browser, or deploy the folder to Vercel/Netlify/any static host.
+## Run Locally
+
+**Prerequisites:**  Node.js
+
+
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
