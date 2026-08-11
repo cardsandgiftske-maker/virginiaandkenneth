@@ -1,6 +1,0 @@
-{
-  "name": "Virginia & Kenneth - Traditional Wedding",
-  "description": "Official wedding invitation minisite for Virginia Mutuku & Kenneth Abonyo on October 3, 2026 at Country Lodge Tawa. Featuring live countdown, interactive RSVP, venue map, schedule, gifting, and guestbook.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
