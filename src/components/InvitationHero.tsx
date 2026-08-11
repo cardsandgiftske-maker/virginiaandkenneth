@@ -210,10 +210,13 @@ END:VCALENDAR`;
         </div>
 
         {/* Inner Content Container - Following exact format from image */}
-        <div className="text-center space-y-6 sm:space-y-7 relative z-10 px-2 sm:px-6 py-4 max-w-xl mx-auto">
+        <div className="text-center space-y-5 sm:space-y-6 relative z-10 px-2 sm:px-6 py-4 max-w-xl mx-auto">
           
+          {/* Top Traditional Geometric Symbol Emblem */}
+          <TopEmblemSVG className="w-full max-w-xs sm:max-w-md mx-auto -mb-2" />
+
           {/* 1. Top Heading */}
-          <div className="my-2 px-2">
+          <div className="my-1 px-2">
             <h2 className="text-sm sm:text-base md:text-lg font-serif tracking-[0.22em] font-bold text-[#C15C3D] uppercase leading-snug drop-shadow-2xs max-w-lg mx-auto">
               TRADITIONAL WEDDING CEREMONY
               <span className="block text-xs sm:text-sm font-serif tracking-[0.3em] text-[#1E3A2B] font-bold mt-1 uppercase">
