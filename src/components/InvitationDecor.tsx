@@ -337,31 +337,101 @@ export const BottomRightFloralSVG: React.FC<{ className?: string }> = ({ classNa
   </svg>
 );
 
-// Top Tribal Diamond Emblem SVG
+// Top Tribal Diamond Emblem SVG - Matches traditional boho geometric symbol
 export const TopEmblemSVG: React.FC<{ className?: string }> = ({ className = '' }) => (
-  <div className={`flex flex-col items-center justify-center my-2 ${className}`}>
-    <div className="relative flex items-center justify-center">
-      {/* Outer Lines */}
-      <div className="w-16 sm:w-28 h-[1px] bg-gradient-to-r from-transparent via-[#C15C3D] to-transparent mr-2" />
+  <div className={`flex items-center justify-center my-3 ${className}`}>
+    <svg
+      viewBox="0 0 320 120"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-full max-w-sm sm:max-w-md h-auto drop-shadow-2xs select-none"
+    >
+      {/* Colors: Terracotta/Rust = #A8482A, Earthy Sage Green = #405847, Line = #8C6F5E */}
       
-      {/* Diamond Emblem */}
-      <div className="relative flex items-center justify-center">
-        {/* Diamond Outer */}
-        <div className="w-6 h-6 rotate-45 border-2 border-[#C15C3D] bg-[#FDF8F2] flex items-center justify-center shadow-xs">
-          <div className="w-3.5 h-3.5 border border-[#D4A359] bg-[#1E3A2B] flex items-center justify-center">
-            <div className="w-1.5 h-1.5 bg-[#D4A359]" />
-          </div>
-        </div>
-        
-        {/* 4 External Dots around emblem */}
-        <div className="absolute -top-2 w-1.5 h-1.5 rounded-full bg-[#C15C3D]" />
-        <div className="absolute -bottom-2 w-1.5 h-1.5 rounded-full bg-[#C15C3D]" />
-        <div className="absolute -left-2 w-1.5 h-1.5 rounded-full bg-[#C15C3D]" />
-        <div className="absolute -right-2 w-1.5 h-1.5 rounded-full bg-[#C15C3D]" />
-      </div>
+      {/* Horizontal Divider Lines */}
+      <line x1="22" y1="60" x2="110" y2="60" stroke="#8C6F5E" strokeWidth="1.2" strokeLinecap="round" />
+      <circle cx="20" cy="60" r="2" fill="#8C6F5E" />
 
-      <div className="w-16 sm:w-28 h-[1px] bg-gradient-to-r from-transparent via-[#C15C3D] to-transparent ml-2" />
-    </div>
+      <line x1="210" y1="60" x2="298" y2="60" stroke="#8C6F5E" strokeWidth="1.2" strokeLinecap="round" />
+      <circle cx="300" cy="60" r="2" fill="#8C6F5E" />
+
+      {/* Left Terracotta Rays & Dots */}
+      <path d="M 108 53 L 84 46 C 94 51 98 54 108 55 Z" fill="#A8482A" />
+      <circle cx="72" cy="43" r="2.5" fill="#A8482A" />
+      
+      <path d="M 108 67 L 84 74 C 94 69 98 66 108 65 Z" fill="#A8482A" />
+      <circle cx="72" cy="77" r="2.5" fill="#A8482A" />
+
+      {/* Right Terracotta Rays & Dots */}
+      <path d="M 212 53 L 236 46 C 226 51 222 54 212 55 Z" fill="#A8482A" />
+      <circle cx="248" cy="43" r="2.5" fill="#A8482A" />
+
+      <path d="M 212 67 L 236 74 C 226 69 222 66 212 65 Z" fill="#A8482A" />
+      <circle cx="248" cy="77" r="2.5" fill="#A8482A" />
+
+      {/* Outer Terracotta Main Diamond */}
+      <polygon points="160,26 204,60 160,94 116,60" fill="none" stroke="#A8482A" strokeWidth="2.5" strokeLinejoin="miter" />
+
+      {/* Top Cap Diamond & Connection */}
+      <line x1="160" y1="26" x2="160" y2="18" stroke="#A8482A" strokeWidth="2" />
+      <polygon points="160,6 168,14 160,22 152,14" fill="#FDF8F2" stroke="#A8482A" strokeWidth="2" strokeLinejoin="miter" />
+      <polygon points="160,11 163,14 160,17 157,14" fill="#A8482A" />
+
+      {/* Bottom Cap Diamond & Connection */}
+      <line x1="160" y1="94" x2="160" y2="102" stroke="#A8482A" strokeWidth="2" />
+      <polygon points="160,98 168,106 160,114 152,106" fill="#FDF8F2" stroke="#A8482A" strokeWidth="2" strokeLinejoin="miter" />
+      <polygon points="160,103 163,106 160,109 157,106" fill="#A8482A" />
+
+      {/* Bottom Diagonal Hash Strokes */}
+      <line x1="149" y1="96" x2="140" y2="105" stroke="#A8482A" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="171" y1="96" x2="180" y2="105" stroke="#A8482A" strokeWidth="2.5" strokeLinecap="round" />
+
+      {/* Flanking External Diamonds & Accents */}
+      {/* Upper Left */}
+      <polygon points="126,33 130,37 126,41 122,37" fill="#A8482A" />
+      <line x1="135" y1="28" x2="139" y2="24" stroke="#405847" strokeWidth="2" strokeLinecap="round" />
+      <line x1="139" y1="33" x2="143" y2="29" stroke="#405847" strokeWidth="2" strokeLinecap="round" />
+
+      {/* Upper Right */}
+      <polygon points="194,33 198,37 194,41 190,37" fill="#A8482A" />
+      <line x1="185" y1="28" x2="181" y2="24" stroke="#405847" strokeWidth="2" strokeLinecap="round" />
+      <line x1="181" y1="33" x2="177" y2="29" stroke="#405847" strokeWidth="2" strokeLinecap="round" />
+
+      {/* Lower Left */}
+      <polygon points="126,81 130,85 126,89 122,85" fill="#405847" />
+      <line x1="134" y1="93" x2="141" y2="86" stroke="#A8482A" strokeWidth="2.5" strokeLinecap="round" />
+
+      {/* Lower Right */}
+      <polygon points="194,81 198,85 194,89 190,85" fill="#405847" />
+      <line x1="186" y1="93" x2="179" y2="86" stroke="#A8482A" strokeWidth="2.5" strokeLinecap="round" />
+
+      {/* INNER GREEN MOTIF */}
+      <g stroke="#405847" fill="none">
+        {/* Inner Diamond */}
+        <polygon points="160,48 172,60 160,72 148,60" strokeWidth="2.5" strokeLinejoin="miter" />
+        <polygon points="160,57 163,60 160,63 157,60" fill="#405847" stroke="none" />
+
+        {/* Top Green Chevron & Trunk */}
+        <line x1="160" y1="48" x2="160" y2="34" strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M 152 42 L 160 48 L 168 42" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="152" cy="44" r="1.5" fill="#405847" stroke="none" />
+        <circle cx="168" cy="44" r="1.5" fill="#405847" stroke="none" />
+
+        {/* Bottom Green Chevron & Trunk */}
+        <line x1="160" y1="72" x2="160" y2="86" strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M 152 78 L 160 72 L 168 78" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="152" cy="76" r="1.5" fill="#405847" stroke="none" />
+        <circle cx="168" cy="76" r="1.5" fill="#405847" stroke="none" />
+
+        {/* Left & Right Inner Extensions */}
+        <path d="M 148 60 L 138 60 M 138 56 L 138 64" strokeWidth="2" strokeLinecap="round" />
+        <path d="M 172 60 L 182 60 M 182 56 L 182 64" strokeWidth="2" strokeLinecap="round" />
+        <circle cx="144" cy="54" r="1.5" fill="#405847" stroke="none" />
+        <circle cx="144" cy="66" r="1.5" fill="#405847" stroke="none" />
+        <circle cx="176" cy="54" r="1.5" fill="#405847" stroke="none" />
+        <circle cx="176" cy="66" r="1.5" fill="#405847" stroke="none" />
+      </g>
+    </svg>
   </div>
 );
 
