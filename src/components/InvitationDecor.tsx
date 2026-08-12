@@ -175,96 +175,186 @@ export const TopRightBasketAndFabricSVG: React.FC<{ className?: string }> = ({ c
   </svg>
 );
 
-// Bottom Left Clay Water Pot (Calabash), Gourds & Terracotta Draped Cloth
+// Bottom Left Clay Water Pot (Jug with Handle), Woven Lid Basket, Small Bowl & Terracotta Draped Cloth
 export const BottomLeftClayPotAndDrapeSVG: React.FC<{ className?: string }> = ({ className = '' }) => (
   <svg
-    viewBox="0 0 250 250"
+    viewBox="0 0 280 320"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className={`pointer-events-none ${className}`}
   >
-    {/* Draped Terracotta Fabric Base */}
-    <g id="terracotta-fabric">
+    {/* Draped Sage Green & Terracotta Fabric Base */}
+    <g id="draped-fabric-base">
+      {/* Sage Green Fabric Underlayer */}
       <path
-        d="M0 110 C40 110 80 150 130 190 C170 220 200 240 250 250 L0 250 Z"
+        d="M0 120 C50 120 100 160 160 210 C210 250 240 280 280 320 L0 320 Z"
+        fill="#3B5745"
+        opacity="0.95"
+      />
+      <path d="M0 120 Q90 190 260 320" stroke="#253C2E" strokeWidth="2.5" opacity="0.6" />
+
+      {/* Terracotta Fabric Top Swag */}
+      <path
+        d="M0 210 C40 210 80 240 140 270 C180 290 220 305 270 320 L0 320 Z"
         fill="#A8482A"
         opacity="0.95"
       />
       <path
-        d="M0 150 C30 150 60 180 110 210 C150 235 180 245 230 250 L0 250 Z"
-        fill="#C15C3D"
-        opacity="0.85"
-      />
-      <path
-        d="M0 190 C20 190 40 210 80 230 C110 242 140 248 180 250 L0 250 Z"
+        d="M0 245 C30 245 60 265 110 288 C150 305 190 315 240 320 L0 320 Z"
         fill="#8A341A"
         opacity="0.9"
       />
       {/* Fabric Fold Highlights */}
-      <path d="M0 110 Q70 170 220 250" stroke="#E3896B" strokeWidth="2" opacity="0.5" />
-      <path d="M0 150 Q60 200 170 250" stroke="#702611" strokeWidth="2.5" opacity="0.6" />
+      <path d="M0 210 Q80 260 250 320" stroke="#D86B47" strokeWidth="2" opacity="0.6" />
+      <path d="M0 245 Q70 280 210 320" stroke="#5C1F0E" strokeWidth="2.5" opacity="0.7" />
     </g>
 
-    {/* Traditional African Earthenware Clay Pot (Kiango / Terracotta Jar) */}
-    <g id="clay-pot" transform="translate(65, 120)">
-      {/* Drop shadow */}
-      <ellipse cx="25" cy="85" rx="42" ry="12" fill="#421307" opacity="0.4" />
+    {/* Traditional African Earthenware Clay Jug/Pot with Handle & Stamped Tribal Patterns */}
+    <g id="clay-pot-jug" transform="translate(15, 95)">
+      {/* Drop Shadow */}
+      <ellipse cx="65" cy="182" rx="52" ry="14" fill="#25120B" opacity="0.45" />
 
-      {/* Main Pot Body */}
+      {/* Handle on Right Side */}
       <path
-        d="M10 -15 C10 -25 40 -25 40 -15 L36 0 C58 15 65 48 52 72 C40 92 10 92 -2 72 C-15 48 -8 15 14 0 Z"
-        fill="#9E4328"
-        stroke="#6B2915"
-        strokeWidth="2.5"
-      />
-
-      {/* Pot Rim */}
-      <ellipse cx="25" cy="-20" rx="18" ry="6" fill="#6B2915" />
-      <ellipse cx="25" cy="-21" rx="15" ry="4" fill="#B85639" />
-      <ellipse cx="25" cy="-22" rx="12" ry="2.5" fill="#3D1409" />
-
-      {/* Pot Highlights & Shadowing Gradient Effect */}
-      <path
-        d="M2 20 C-6 40 0 65 15 80 C5 65 -2 40 10 20 Z"
-        fill="#BD6043"
-        opacity="0.8"
+        d="M80 35 C115 35 125 75 88 100"
+        stroke="#7A2E16"
+        strokeWidth="11"
+        strokeLinecap="round"
+        fill="none"
       />
       <path
-        d="M38 10 C52 30 50 60 38 78 C48 60 48 30 35 15 Z"
-        fill="#541B0B"
+        d="M80 35 C112 35 120 75 88 100"
+        stroke="#A8482A"
+        strokeWidth="7"
+        strokeLinecap="round"
+        fill="none"
+      />
+
+      {/* Main Jug Body */}
+      <path
+        d="M40 0 C40 -12 70 -12 70 0 L66 22 C98 42 110 88 92 125 C75 158 35 158 12 125 C-6 88 6 42 38 22 Z"
+        fill="#A8482A"
+        stroke="#5C2415"
+        strokeWidth="3"
+      />
+
+      {/* Pot Mouth Rim */}
+      <ellipse cx="55" cy="-2" rx="20" ry="7" fill="#5C2415" />
+      <ellipse cx="55" cy="-3" rx="17" ry="5" fill="#C15C3D" />
+      <ellipse cx="55" cy="-4" rx="13" ry="3" fill="#3B150A" />
+
+      {/* Neck Tribal Pattern Band */}
+      <path d="M42 12 Q55 17 68 12 L67 18 Q55 23 43 18 Z" fill="#3B150A" />
+      <path d="M44 14 L48 18 L52 14 L56 18 L60 14 L64 18" stroke="#D4A359" strokeWidth="1.2" fill="none" />
+
+      {/* Main Belly Tribal Diamond & Chevron Band */}
+      <path
+        d="M10 58 Q55 75 100 58 L103 82 Q55 98 7 82 Z"
+        fill="#2D4737"
+        stroke="#D4A359"
+        strokeWidth="1.5"
+      />
+      
+      {/* Zigzag Chevrons & Diamonds inside main band */}
+      <path
+        d="M12 66 L22 76 L32 66 L42 76 L52 66 L62 76 L72 66 L82 76 L92 66 L98 72"
+        stroke="#FDF8F2"
+        strokeWidth="2"
+        fill="none"
+      />
+      <g fill="#A8482A" stroke="#D4A359" strokeWidth="1">
+        <polygon points="22,60 26,64 22,68 18,64" />
+        <polygon points="42,60 46,64 42,68 38,64" />
+        <polygon points="62,60 66,64 62,68 58,64" />
+        <polygon points="82,60 86,64 82,68 78,64" />
+      </g>
+
+      {/* Lower Triangles / Sawtooth Pattern on Pot */}
+      <path
+        d="M18 105 L26 120 L34 105 L42 120 L50 105 L58 120 L66 105 L74 120 L82 105"
+        stroke="#5C2415"
+        strokeWidth="2"
+        fill="#7A2E16"
+      />
+
+      {/* Pot Highlights & Shadow Curve */}
+      <path
+        d="M15 35 C3 65 12 110 32 138 C18 110 8 70 24 35 Z"
+        fill="#D86B47"
         opacity="0.7"
       />
-
-      {/* Traditional Tribal Stamped Diamond Band across Pot Body */}
       <path
-        d="M1 32 Q25 42 49 32 L51 44 Q25 54 -1 44 Z"
-        fill="#1E3A2B"
+        d="M78 35 C98 70 92 115 75 142 C88 115 90 70 70 35 Z"
+        fill="#3B150A"
+        opacity="0.6"
+      />
+    </g>
+
+    {/* Woven Basket Pot with Round Lid (Kiondo Lid Basket) */}
+    <g id="woven-lid-basket" transform="translate(10, 215)">
+      {/* Shadow */}
+      <ellipse cx="50" cy="65" rx="52" ry="12" fill="#25120B" opacity="0.4" />
+
+      {/* Basket Base */}
+      <ellipse cx="50" cy="35" rx="52" ry="26" fill="#D4A359" stroke="#8A5A1B" strokeWidth="2.5" />
+      <path d="M-2 35 C0 55 20 62 50 62 C80 62 100 55 102 35 Z" fill="#B8853D" stroke="#704712" strokeWidth="2" />
+      
+      {/* Horizontal Woven Coils on Basket */}
+      <path d="M2 40 Q50 50 98 40" stroke="#704712" strokeWidth="1.8" fill="none" />
+      <path d="M6 46 Q50 56 94 46" stroke="#704712" strokeWidth="1.8" fill="none" />
+      <path d="M12 52 Q50 60 88 52" stroke="#704712" strokeWidth="1.8" fill="none" />
+
+      {/* Rounded Lid */}
+      <ellipse cx="50" cy="22" rx="50" ry="20" fill="#E8D1B5" stroke="#704712" strokeWidth="2.5" />
+      <ellipse cx="50" cy="18" rx="42" ry="15" fill="#C15C3D" opacity="0.85" />
+      <ellipse cx="50" cy="15" rx="32" ry="11" fill="#2D4737" />
+      <ellipse cx="50" cy="12" rx="20" ry="7" fill="#D4A359" />
+
+      {/* Top Knob Handle on Lid */}
+      <circle cx="50" cy="6" r="8" fill="#25120B" stroke="#D4A359" strokeWidth="1.5" />
+      <circle cx="50" cy="4" r="4" fill="#704712" />
+    </g>
+
+    {/* Small Clay Cup / Bowl in Front with Dot Rim */}
+    <g id="small-clay-cup" transform="translate(100, 245)">
+      {/* Shadow */}
+      <ellipse cx="36" cy="42" rx="36" ry="9" fill="#25120B" opacity="0.4" />
+
+      {/* Cup Body */}
+      <path
+        d="M6 0 C-4 12 2 35 36 38 C70 35 76 12 66 0 Z"
+        fill="#A8482A"
+        stroke="#5C2415"
+        strokeWidth="2"
+      />
+      {/* Cup Mouth / Liquid Interior */}
+      <ellipse cx="36" cy="0" rx="30" ry="8" fill="#3B150A" stroke="#5C2415" strokeWidth="1.5" />
+      <ellipse cx="36" cy="1" rx="26" ry="5" fill="#1C0904" />
+
+      {/* White Dots around Top Rim */}
+      <g fill="#FDF8F2">
+        <circle cx="12" cy="7" r="1.5" />
+        <circle cx="18" cy="10" r="1.5" />
+        <circle cx="25" cy="12" r="1.5" />
+        <circle cx="33" cy="13" r="1.5" />
+        <circle cx="41" cy="12" r="1.5" />
+        <circle cx="48" cy="10" r="1.5" />
+        <circle cx="54" cy="7" r="1.5" />
+      </g>
+
+      {/* Stamped Diamond Row on Small Cup */}
+      <path
+        d="M12 18 Q36 25 60 18 L62 28 Q36 35 10 28 Z"
+        fill="#2D4737"
         stroke="#D4A359"
         strokeWidth="1"
       />
-      
-      {/* White/Ochre Diamond Stamps inside the band */}
-      <g fill="#FDF8F2" stroke="#C15C3D" strokeWidth="0.8">
-        <polygon points="5,36 9,33 13,36 9,39" />
-        <polygon points="17,38 21,35 25,38 21,41" />
-        <polygon points="29,38 33,35 37,38 33,41" />
-        <polygon points="41,36 45,33 49,36 45,39" />
-      </g>
-    </g>
-
-    {/* Small Woven Calabash / Gourd Bowl in Front */}
-    <g id="small-woven-bowl" transform="translate(42, 205)">
-      <ellipse cx="0" cy="0" rx="26" ry="14" fill="#D4A359" stroke="#8A5A1B" strokeWidth="2" />
-      <ellipse cx="0" cy="-3" rx="22" ry="10" fill="#253C2E" />
-      <ellipse cx="0" cy="-3" rx="16" ry="6" stroke="#D4A359" strokeWidth="1.5" strokeDasharray="3 2" />
-      <circle cx="0" cy="-3" r="3" fill="#C15C3D" />
-    </g>
-
-    {/* Clay Drinking Cup / Small Pot beside main pot */}
-    <g id="small-pot" transform="translate(130, 215)">
-      <path d="M-12 -10 Q0 -12 12 -10 L10 5 Q18 12 12 20 Q0 24 -12 20 Q-18 12 -10 5 Z" fill="#80331A" stroke="#4F1B0B" strokeWidth="1.5" />
-      <ellipse cx="0" cy="-10" rx="12" ry="3.5" fill="#4F1B0B" />
-      <path d="M-10 2 Q0 6 10 2" stroke="#D4A359" strokeWidth="1" />
+      <path
+        d="M14 23 L20 28 L26 23 L32 28 L38 23 L44 28 L50 23 L56 28"
+        stroke="#FDF8F2"
+        strokeWidth="1.5"
+        fill="none"
+      />
     </g>
   </svg>
 );
@@ -435,33 +525,40 @@ export const TopEmblemSVG: React.FC<{ className?: string }> = ({ className = '' 
   </div>
 );
 
-// Vertical Side Geometric Tribal Border Pattern Component
+// Vertical Side Geometric Tribal Border Pattern Component matching the uploaded image exactly
 export const SideTribalBorderSVG: React.FC<{ side: 'left' | 'right'; className?: string }> = ({ side, className = '' }) => (
   <svg
-    viewBox="0 0 24 600"
+    viewBox="0 0 28 600"
     preserveAspectRatio="none"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className={`h-full w-4 sm:w-6 pointer-events-none ${className}`}
+    className={`h-full w-5 sm:w-7 pointer-events-none ${className}`}
   >
     <defs>
-      <pattern id="tribal-diamond-pattern" width="24" height="40" patternUnits="userSpaceOnUse">
-        {/* Outer Guide Lines */}
-        <line x1="2" y1="0" x2="2" y2="40" stroke="#C15C3D" strokeWidth="1" opacity="0.6" />
-        <line x1="22" y1="0" x2="22" y2="40" stroke="#C15C3D" strokeWidth="1" opacity="0.6" />
-        <line x1="5" y1="0" x2="5" y2="40" stroke="#D4A359" strokeWidth="0.8" />
-        <line x1="19" y1="0" x2="19" y2="40" stroke="#D4A359" strokeWidth="0.8" />
+      <pattern id="tribal-diamond-pattern" width="28" height="50" patternUnits="userSpaceOnUse">
+        {/* Double Framing Gold / Terracotta Lines */}
+        <line x1="2" y1="0" x2="2" y2="50" stroke="#A8482A" strokeWidth="1.2" opacity="0.8" />
+        <line x1="5" y1="0" x2="5" y2="50" stroke="#D4A359" strokeWidth="1" opacity="0.9" />
 
-        {/* Diamond Motif */}
-        <polygon points="12,2 20,20 12,38 4,20" fill="none" stroke="#1E3A2B" strokeWidth="1.5" />
-        <polygon points="12,7 17,20 12,33 7,20" fill="#C15C3D" opacity="0.85" />
-        <polygon points="12,12 14.5,20 12,28 9.5,20" fill="#D4A359" />
+        <line x1="23" y1="0" x2="23" y2="50" stroke="#D4A359" strokeWidth="1" opacity="0.9" />
+        <line x1="26" y1="0" x2="26" y2="50" stroke="#A8482A" strokeWidth="1.2" opacity="0.8" />
 
-        {/* Small Connector Diamonds */}
-        <polygon points="12,0 14,2 12,4 10,2" fill="#1E3A2B" />
-        <polygon points="12,38 14,40 12,42 10,40" fill="#1E3A2B" />
+        {/* Inner Chevron / Diamond Tribal Stack matching uploaded image */}
+        {/* Upper Green Chevron */}
+        <path d="M 8 10 L 14 4 L 20 10" stroke="#3B5745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        
+        {/* Terracotta Central Diamond */}
+        <polygon points="14,14 20,22 14,30 8,22" fill="#A8482A" opacity="0.9" />
+        <polygon points="14,18 17,22 14,26 11,22" fill="#FDF8F2" />
+
+        {/* Lower Green Chevron */}
+        <path d="M 8 34 L 14 40 L 20 34" stroke="#3B5745" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+
+        {/* Connector Accents */}
+        <circle cx="14" cy="45" r="1.8" fill="#D4A359" />
+        <circle cx="14" cy="49" r="1.5" fill="#A8482A" />
       </pattern>
     </defs>
-    <rect width="24" height="100%" fill="url(#tribal-diamond-pattern)" />
+    <rect width="28" height="100%" fill="url(#tribal-diamond-pattern)" />
   </svg>
 );
