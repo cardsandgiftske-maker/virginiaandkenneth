@@ -126,6 +126,13 @@ export const VintageEnvelopeWrapper: React.FC<VintageEnvelopeWrapperProps> = ({
                 Invitation Unsealed • Virginia &amp; Kenneth
               </span>
             </div>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="px-3 py-1 bg-[#D4A359]/20 hover:bg-[#D4A359]/30 text-[#D4A359] rounded-full text-[11px] font-sans font-bold uppercase tracking-wider transition-colors flex items-center gap-1 cursor-pointer"
+            >
+              <Mail className="w-3 h-3" />
+              <span>View Envelope</span>
+            </button>
           </div>
 
           {/* Main Unfolded Content Flow */}
