@@ -2,10 +2,11 @@ export interface RsvpResponse {
   id: string;
   name: string;
   phone: string;
+  email?: string | null;
   attending: 'yes' | 'no';
   guestCount: number;
-  dietary?: string;
-  message?: string;
+  dietary?: string | null;
+  message?: string | null;
   submittedAt: string;
 }
 
