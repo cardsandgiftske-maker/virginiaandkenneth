@@ -47,10 +47,10 @@ export const RsvpSection: React.FC = () => {
       setFormData({
         name: submittedRsvp.name || '',
         phone: submittedRsvp.phone || '',
-        email: '',
+        email: submittedRsvp.email || '',
         attending: submittedRsvp.attending || 'yes',
         guestCount: submittedRsvp.guestCount || 1,
-        dietary: '',
+        dietary: submittedRsvp.dietary || '',
         message: submittedRsvp.message || '',
       });
     }
@@ -81,8 +81,10 @@ export const RsvpSection: React.FC = () => {
             id: existingDoc.id,
             name: existingDoc.fullName,
             phone: existingDoc.phone,
+            email: existingDoc.email || null,
             attending: existingDoc.attending,
             guestCount: existingDoc.guestCount,
+            dietary: existingDoc.dietary || null,
             message: existingDoc.message || '',
             submittedAt: new Date().toISOString(),
           };
@@ -96,34 +98,30 @@ export const RsvpSection: React.FC = () => {
 
       let firestoreDocId = submittedRsvp?.id || existingDoc?.id;
 
+      const rsvpPayload = {
+        fullName: formData.name.trim(),
+        phone: cleanedPhone,
+        email: formData.email.trim() || null,
+        attending: formData.attending,
+        guestCount: formData.attending === 'yes' ? formData.guestCount : 0,
+        dietary: formData.dietary.trim() || null,
+        message: formData.message.trim() || null,
+      };
+
       if (isEditing && firestoreDocId && !firestoreDocId.startsWith('local-')) {
-        await updateRsvpInFirestore(firestoreDocId, {
-          fullName: formData.name.trim(),
-          phone: cleanedPhone,
-          email: formData.email.trim() || undefined,
-          attending: formData.attending,
-          guestCount: formData.attending === 'yes' ? formData.guestCount : 0,
-          dietary: formData.dietary.trim(),
-          message: formData.message.trim(),
-        });
+        await updateRsvpInFirestore(firestoreDocId, rsvpPayload);
       } else {
-        firestoreDocId = await submitRsvpToFirestore({
-          fullName: formData.name.trim(),
-          phone: cleanedPhone,
-          email: formData.email.trim() || undefined,
-          attending: formData.attending,
-          guestCount: formData.attending === 'yes' ? formData.guestCount : 0,
-          dietary: formData.dietary.trim(),
-          message: formData.message.trim(),
-        });
+        firestoreDocId = await submitRsvpToFirestore(rsvpPayload);
       }
 
       const rsvp: RsvpResponse = {
         id: firestoreDocId || ('rsvp-' + Date.now()),
         name: formData.name.trim(),
         phone: cleanedPhone,
+        email: formData.email.trim() || null,
         attending: formData.attending,
         guestCount: formData.attending === 'yes' ? formData.guestCount : 0,
+        dietary: formData.dietary.trim() || null,
         message: formData.message.trim(),
         submittedAt: new Date().toISOString(),
       };
@@ -147,19 +145,7 @@ export const RsvpSection: React.FC = () => {
       }
     } catch (err: any) {
       console.error('Error submitting RSVP to Firestore:', err);
-      // Fallback: local save if network is restricted
-      const rsvp: RsvpResponse = {
-        id: 'local-' + Date.now(),
-        name: formData.name.trim(),
-        phone: formData.phone.trim(),
-        attending: formData.attending,
-        guestCount: formData.attending === 'yes' ? formData.guestCount : 0,
-        message: formData.message.trim(),
-        submittedAt: new Date().toISOString(),
-      };
-      localStorage.setItem('vk_wedding_rsvp', JSON.stringify(rsvp));
-      setSubmittedRsvp(rsvp);
-      setIsEditing(false);
+      setErrorMessage(`Failed to save RSVP: ${err.message || 'Please check your connection and try again.'}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -310,24 +296,53 @@ export const RsvpSection: React.FC = () => {
               />
             </div>
 
+            {/* Optional Email Address */}
+            <div>
+              <label className="block text-xs font-sans uppercase font-bold text-[#1E3A2B] mb-1">
+                Email Address <span className="text-gray-500 font-normal text-[11px]">(Optional)</span>
+              </label>
+              <input
+                type="email"
+                placeholder="e.g. samuel@example.com"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className="w-full px-4 py-3 rounded-xl bg-white border border-[#D4A359]/60 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
+              />
+            </div>
+
             {/* Additional details if attending */}
             {formData.attending === 'yes' && (
-              <div>
-                <label className="block text-xs font-sans uppercase font-bold text-[#1E3A2B] mb-1">
-                  Number of Guests
-                </label>
-                <select
-                  value={formData.guestCount}
-                  onChange={(e) => setFormData({ ...formData, guestCount: parseInt(e.target.value) })}
-                  className="w-full px-4 py-3 rounded-xl bg-white border border-[#D4A359]/60 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
-                >
-                  <option value={1}>1 Person</option>
-                  <option value={2}>2 People</option>
-                  <option value={3}>3 People</option>
-                  <option value={4}>4 People</option>
-                  <option value={5}>5+ Family Group</option>
-                </select>
-              </div>
+              <>
+                <div>
+                  <label className="block text-xs font-sans uppercase font-bold text-[#1E3A2B] mb-1">
+                    Number of Guests
+                  </label>
+                  <select
+                    value={formData.guestCount}
+                    onChange={(e) => setFormData({ ...formData, guestCount: parseInt(e.target.value) })}
+                    className="w-full px-4 py-3 rounded-xl bg-white border border-[#D4A359]/60 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
+                  >
+                    <option value={1}>1 Person</option>
+                    <option value={2}>2 People</option>
+                    <option value={3}>3 People</option>
+                    <option value={4}>4 People</option>
+                    <option value={5}>5+ Family Group</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-sans uppercase font-bold text-[#1E3A2B] mb-1">
+                    Dietary Requirements <span className="text-gray-500 font-normal text-[11px]">(Optional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Vegetarian, Halal, Nut allergy..."
+                    value={formData.dietary}
+                    onChange={(e) => setFormData({ ...formData, dietary: e.target.value })}
+                    className="w-full px-4 py-3 rounded-xl bg-white border border-[#D4A359]/60 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
+                  />
+                </div>
+              </>
             )}
 
             {/* Congratulatory Message */}
