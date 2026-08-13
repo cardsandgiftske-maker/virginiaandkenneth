@@ -23,12 +23,49 @@ export const db = getFirestore(app, databaseId);
 export interface RsvpData {
   fullName: string;
   phone: string;
-  email?: string;
+  email?: string | null;
   attending: 'yes' | 'no';
   guestCount: number;
-  dietary?: string;
-  message?: string;
+  dietary?: string | null;
+  message?: string | null;
   createdAt?: any;
+}
+
+/**
+ * Sanitizes RSVP payload before sending to Firestore.
+ * Explicitly maps empty/undefined strings to `null` so Firestore never receives `undefined`.
+ */
+export function sanitizeRsvpData(data: Partial<RsvpData>): Record<string, any> {
+  const clean: Record<string, any> = {};
+
+  if (data.fullName !== undefined && data.fullName !== null) {
+    clean.fullName = String(data.fullName).trim();
+  }
+  if (data.phone !== undefined && data.phone !== null) {
+    clean.phone = String(data.phone).trim();
+  }
+  if (data.attending !== undefined && data.attending !== null) {
+    clean.attending = data.attending;
+  }
+  if (data.guestCount !== undefined && data.guestCount !== null) {
+    clean.guestCount = data.attending === 'no' ? 0 : Number(data.guestCount) || 1;
+  }
+
+  // Optional fields: store trimmed string or null (never undefined)
+  if (data.email !== undefined) {
+    const trimmed = typeof data.email === 'string' ? data.email.trim() : '';
+    clean.email = trimmed.length > 0 ? trimmed : null;
+  }
+  if (data.dietary !== undefined) {
+    const trimmed = typeof data.dietary === 'string' ? data.dietary.trim() : '';
+    clean.dietary = trimmed.length > 0 ? trimmed : null;
+  }
+  if (data.message !== undefined) {
+    const trimmed = typeof data.message === 'string' ? data.message.trim() : '';
+    clean.message = trimmed.length > 0 ? trimmed : null;
+  }
+
+  return clean;
 }
 
 export function normalizePhone(phone: string): string {
@@ -50,8 +87,9 @@ export async function findRsvpByPhone(phone: string): Promise<(RsvpData & { id: 
 
 export async function submitRsvpToFirestore(data: RsvpData) {
   const rsvpsRef = collection(db, 'rsvps');
+  const cleanData = sanitizeRsvpData(data);
   const docRef = await addDoc(rsvpsRef, {
-    ...data,
+    ...cleanData,
     createdAt: serverTimestamp(),
   });
   return docRef.id;
@@ -79,7 +117,8 @@ export async function getRecentRsvpsFromFirestore(maxCount = 10): Promise<Array<
 
 export async function updateRsvpInFirestore(id: string, updatedData: Partial<RsvpData>) {
   const docRef = doc(db, 'rsvps', id);
-  await updateDoc(docRef, updatedData);
+  const cleanData = sanitizeRsvpData(updatedData);
+  await updateDoc(docRef, cleanData);
 }
 
 export async function deleteRsvpFromFirestore(id: string) {
