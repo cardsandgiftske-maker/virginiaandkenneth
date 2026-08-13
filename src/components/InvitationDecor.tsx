@@ -1230,6 +1230,235 @@ export const UploadedTribalDiamondSymbolSVG: React.FC<{ className?: string; size
   );
 };
 
+/* Bottom Left Realistic Vector Earthenware Pottery & Woven Basket (No Background) */
+export const UploadedBottomLeftPotterySVG: React.FC<{ className?: string }> = ({ className = "" }) => (
+  <svg 
+    viewBox="0 0 340 380" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg" 
+    className={`pointer-events-none filter drop-shadow-md ${className}`}
+  >
+    <defs>
+      {/* Pitcher 3D Clay Gradient */}
+      <linearGradient id="jug-body-3d" x1="0%" y1="20%" x2="100%" y2="80%">
+        <stop offset="0%" stopColor="#D97A53" />
+        <stop offset="35%" stopColor="#B34F2C" />
+        <stop offset="75%" stopColor="#7A2D13" />
+        <stop offset="100%" stopColor="#451406" />
+      </linearGradient>
+
+      {/* Pitcher Inner Mouth Dark Depth */}
+      <linearGradient id="jug-mouth-depth" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#210802" />
+        <stop offset="100%" stopColor="#6E230B" />
+      </linearGradient>
+
+      {/* Woven Basket 3D Fiber Gradient */}
+      <linearGradient id="basket-3d-grad" x1="10%" y1="10%" x2="90%" y2="90%">
+        <stop offset="0%" stopColor="#F2D19D" />
+        <stop offset="40%" stopColor="#C99852" />
+        <stop offset="80%" stopColor="#8C5C23" />
+        <stop offset="100%" stopColor="#52320E" />
+      </linearGradient>
+
+      {/* Small Front Pot 3D Sphere Gradient */}
+      <radialGradient id="small-pot-3d" cx="35%" cy="35%" r="65%">
+        <stop offset="0%" stopColor="#E2815B" />
+        <stop offset="50%" stopColor="#A84321" />
+        <stop offset="85%" stopColor="#69220A" />
+        <stop offset="100%" stopColor="#3B0F03" />
+      </radialGradient>
+
+      {/* Ground Soft Radial Shadows */}
+      <radialGradient id="pot-ground-shadow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stopColor="#2E180E" stopOpacity="0.45" />
+        <stop offset="60%" stopColor="#2E180E" stopOpacity="0.15" />
+        <stop offset="100%" stopColor="#2E180E" stopOpacity="0" />
+      </radialGradient>
+
+      {/* Specular Highlight Gradient */}
+      <linearGradient id="clay-highlight" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.4" />
+        <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+      </linearGradient>
+    </defs>
+
+    {/* Ground Anchoring Soft Shadows (No Solid Fabric Background) */}
+    <ellipse cx="140" cy="355" rx="130" ry="22" fill="url(#pot-ground-shadow)" />
+    <ellipse cx="85" cy="360" rx="75" ry="18" fill="url(#pot-ground-shadow)" />
+    <ellipse cx="210" cy="365" rx="60" ry="14" fill="url(#pot-ground-shadow)" />
+
+    {/* ======================================================== */}
+    {/* 1. LARGE TALL TERRACOTTA EARTHENWARE PITCHER / JUG       */}
+    {/* ======================================================== */}
+    <g id="realistic-terracotta-pitcher" transform="translate(45, 40)">
+      {/* Jug Handle Shadow & Body Attachment */}
+      <path 
+        d="M 122 65 C 165 65, 172 155, 122 180 C 148 155, 145 80, 116 72 Z" 
+        fill="#4A1608" 
+        opacity="0.8"
+      />
+      {/* Jug Handle */}
+      <path 
+        d="M 118 62 C 160 62, 168 150, 118 175 C 142 150, 140 75, 112 70 Z" 
+        fill="url(#jug-body-3d)" 
+        stroke="#330C03" 
+        strokeWidth="1.5"
+      />
+      <path 
+        d="M 122 72 C 148 85, 148 140, 124 165" 
+        stroke="#F7A887" 
+        strokeWidth="1.5" 
+        fill="none" 
+        opacity="0.6"
+      />
+
+      {/* Main Pitcher Body & Neck */}
+      <path 
+        d="M 50 15 
+           Q 85 4 120 15 
+           Q 108 45 88 52 
+           Q 172 120 158 200 
+           Q 142 270 85 275 
+           Q 28 270 12 200 
+           Q -2 120 82 52 
+           Q 62 45 50 15 Z" 
+        fill="url(#jug-body-3d)" 
+        stroke="#2E0A02" 
+        strokeWidth="2.5" 
+        strokeLinejoin="round"
+      />
+
+      {/* 3D Curved Light Reflection Specular Rim */}
+      <path 
+        d="M 28 170 Q 20 120 52 80 Q 32 130 38 190" 
+        fill="url(#clay-highlight)" 
+        opacity="0.6"
+      />
+
+      {/* Jug Mouth Opening & Inner Depth Rim */}
+      <ellipse cx="85" cy="15" rx="35" ry="10" fill="url(#jug-mouth-depth)" stroke="#230701" strokeWidth="2" />
+      <ellipse cx="85" cy="15" rx="31" ry="7" fill="none" stroke="#D97A53" strokeWidth="1" opacity="0.7" />
+
+      {/* Hand-Carved White & Terracotta Tribal Etchings */}
+      <g stroke="#FCEFE3" strokeLinecap="round" strokeLinejoin="round" opacity="0.92">
+        {/* Neck Band 1 */}
+        <path d="M 62 32 Q 85 26 108 32" strokeWidth="2" fill="none" strokeDasharray="3 3" />
+        <path d="M 58 42 Q 85 36 112 42" strokeWidth="2.5" fill="none" />
+
+        {/* Shoulder Tribal Zigzag Chevron Band */}
+        <path d="M 32 82 Q 85 68 138 82" strokeWidth="2" fill="none" />
+        <path 
+          d="M 22 125 L 36 100 L 50 125 L 64 100 L 78 125 L 92 100 L 106 125 L 120 100 L 134 125 L 148 100" 
+          strokeWidth="3" 
+          fill="none" 
+        />
+        <path d="M 18 138 Q 85 120 152 138" strokeWidth="2" fill="none" />
+
+        {/* Belly Diamond Lattice Band */}
+        <path d="M 15 170 Q 85 150 155 170" strokeWidth="2.5" fill="none" />
+        <path 
+          d="M 20 185 
+             L 30 172 L 40 185 L 50 172 L 60 185 L 70 172 L 80 185 L 90 172 L 100 185 L 110 172 L 120 185 L 130 172 L 140 185" 
+          strokeWidth="2" 
+          fill="none" 
+        />
+        <path d="M 22 200 Q 85 180 148 200" strokeWidth="2" fill="none" strokeDasharray="5 3" />
+
+        {/* Base Accent Dots */}
+        <circle cx="50" cy="225" r="2" fill="#FCEFE3" />
+        <circle cx="70" cy="230" r="2" fill="#FCEFE3" />
+        <circle cx="90" cy="230" r="2" fill="#FCEFE3" />
+        <circle cx="110" cy="228" r="2" fill="#FCEFE3" />
+        <circle cx="130" cy="222" r="2" fill="#FCEFE3" />
+      </g>
+    </g>
+
+    {/* ======================================================== */}
+    {/* 2. TRADITIONAL WOVEN GRASS / REED BASKET WITH KNOB LID   */}
+    {/* ======================================================== */}
+    <g id="realistic-woven-basket" transform="translate(10, 195)">
+      {/* Basket Main Body */}
+      <path 
+        d="M 10 70 Q 75 45 140 70 Q 148 115 130 150 Q 75 175 20 150 Q 2 115 10 70 Z" 
+        fill="url(#basket-3d-grad)" 
+        stroke="#3B2107" 
+        strokeWidth="2.5"
+      />
+
+      {/* Basket Lid Body */}
+      <ellipse cx="75" cy="65" rx="68" ry="32" fill="url(#basket-3d-grad)" stroke="#3B2107" strokeWidth="2" />
+      <ellipse cx="75" cy="55" rx="64" ry="26" fill="url(#basket-3d-grad)" stroke="#3B2107" strokeWidth="1.5" />
+
+      {/* Dark Carved Wooden Lid Handle / Knob */}
+      <ellipse cx="75" cy="28" rx="14" ry="7" fill="#291503" stroke="#8C5C23" strokeWidth="1.5" />
+      <circle cx="75" cy="22" r="9" fill="#3D2006" stroke="#1A0D02" strokeWidth="1.5" />
+      <ellipse cx="73" cy="20" rx="3" ry="1.5" fill="#E6C898" opacity="0.6" />
+
+      {/* Concentric Woven Fiber Texture Ribs & Coils */}
+      <g fill="none" stroke="#52320E" strokeWidth="2" opacity="0.8">
+        <ellipse cx="75" cy="38" rx="28" ry="11" strokeDasharray="4 2" />
+        <ellipse cx="75" cy="48" rx="46" ry="18" strokeDasharray="5 3" />
+        <ellipse cx="75" cy="58" rx="58" ry="22" strokeDasharray="6 3" stroke="#2B1703" />
+        
+        {/* Lower Body Coils */}
+        <path d="M 12 88 Q 75 62 138 88" strokeDasharray="5 2" />
+        <path d="M 16 112 Q 75 88 134 112" strokeDasharray="6 3" />
+        <path d="M 22 132 Q 75 108 128 132" strokeDasharray="5 3" stroke="#2B1703" />
+      </g>
+
+      {/* Woven Highlights */}
+      <path d="M 30 75 Q 75 52 120 75" stroke="#FCE0B6" strokeWidth="1.5" fill="none" opacity="0.5" strokeDasharray="3 4" />
+    </g>
+
+    {/* ======================================================== */}
+    {/* 3. SMALL FRONT EARTHENWARE POT WITH TRIBAL PATTERN       */}
+    {/* ======================================================== */}
+    <g id="realistic-small-pot" transform="translate(135, 240)">
+      {/* Pot Main Bulbous Body */}
+      <path 
+        d="M 22 20 
+           Q 60 10 98 20 
+           Q 112 35 105 52 
+           Q 122 88 98 115 
+           Q 60 128 22 115 
+           Q -2 88 15 52 
+           Q 8 35 22 20 Z" 
+        fill="url(#small-pot-3d)" 
+        stroke="#290B02" 
+        strokeWidth="2.5" 
+        strokeLinejoin="round"
+      />
+
+      {/* Pot Mouth Opening & Dark Interior */}
+      <ellipse cx="60" cy="20" rx="38" ry="12" fill="url(#jug-mouth-depth)" stroke="#290B02" strokeWidth="2" />
+      <ellipse cx="60" cy="20" rx="34" ry="9" fill="none" stroke="#E2815B" strokeWidth="1" opacity="0.6" />
+
+      {/* White Painted Tribal Geometric Pattern */}
+      <g stroke="#FFFFFF" strokeLinecap="round" strokeLinejoin="round" opacity="0.95">
+        {/* Rim Dotted Line */}
+        <path d="M 26 32 Q 60 22 94 32" strokeWidth="2" strokeDasharray="2 3" fill="none" />
+        
+        {/* Chevron Diamond Band */}
+        <path d="M 18 60 Q 60 48 102 60" strokeWidth="2" fill="none" />
+        <path 
+          d="M 12 76 
+             L 24 62 L 36 76 L 48 62 L 60 76 L 72 62 L 84 76 L 96 62 L 108 76" 
+          strokeWidth="3" 
+          fill="none" 
+        />
+        <path d="M 14 90 Q 60 76 106 90" strokeWidth="2" fill="none" />
+
+        {/* Lower Dots Ring */}
+        <circle cx="35" cy="100" r="2" fill="#FFFFFF" />
+        <circle cx="50" cy="104" r="2" fill="#FFFFFF" />
+        <circle cx="65" cy="104" r="2" fill="#FFFFFF" />
+        <circle cx="80" cy="102" r="2" fill="#FFFFFF" />
+      </g>
+    </g>
+  </svg>
+);
+
 
 /* Tribal Central Divider with Cowrie Shells & Geometric Spears */
 export const TribalDividerWithShells: React.FC<{ className?: string }> = ({ className = "" }) => (
