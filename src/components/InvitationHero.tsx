@@ -2,14 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { MapPin, Share2, ChevronDown, Check, Volume2, VolumeX, Image as ImageIcon } from 'lucide-react';
 import { WEDDING_DETAILS } from '../data/weddingData';
 import { weddingAudio } from '../lib/weddingAudio';
-import {
-  UploadedBasketMotifsSVG,
-  UploadedVerticalRibbonSVG,
-  UploadedHorizontalRibbonSVG,
-  UploadedTribalDiamondSymbolSVG,
-  UploadedBottomLeftPotterySVG,
-} from './InvitationDecor';
-import pencilArtPotsImg from '../assets/images/pencil_art_pots_1786608552012.jpg';
+import { UploadedTribalDiamondSymbolSVG } from './InvitationDecor';
+import africanPatternBg from '../assets/images/african_pattern_bg_1786615704409.jpg';
 
 interface InvitationHeroProps {
   onOpenCardModal: () => void;
@@ -175,38 +169,23 @@ END:VCALENDAR`;
         ))}
       </div>
 
-      {/* Screen End-to-End Side Decor Ribbons */}
-      <div className="absolute top-0 left-0 bottom-0 w-8 sm:w-12 md:w-14 z-20 pointer-events-none overflow-hidden opacity-90">
-        <UploadedVerticalRibbonSVG />
-      </div>
+      {/* African Pattern Background Layer with Soft Sage Green Blend & Low Opacity */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center pointer-events-none opacity-3 mix-blend-multiply" 
+        style={{ backgroundImage: `url(${africanPatternBg})` }}
+      />
+      {/* Sage Green Soft Tint Overlay for enhanced legibility */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#8A9A86]/10 via-[#8A9A86]/5 to-[#FDF8F2]/40 pointer-events-none" />
 
-      <div className="absolute top-0 right-0 bottom-0 w-8 sm:w-12 md:w-14 z-20 pointer-events-none overflow-hidden opacity-90 scale-x-[-1]">
-        <UploadedVerticalRibbonSVG />
-      </div>
-
-      {/* Screen End-to-End Top Corner Overlapping African Woven Baskets */}
-      <div className="absolute -top-2 left-0 w-44 sm:w-64 md:w-80 h-auto z-30 pointer-events-none">
-        <UploadedBasketMotifsSVG className="w-full h-auto drop-shadow-md" />
-      </div>
-
-      <div className="absolute -top-2 right-0 w-44 sm:w-64 md:w-80 h-auto z-30 pointer-events-none scale-x-[-1]">
-        <UploadedBasketMotifsSVG className="w-full h-auto drop-shadow-md" />
-      </div>
-
-      {/* Screen Bottom-Left Pottery, Woven Basket & Draped Fabric Motif (Synchronized with Tribal Pattern) */}
-      <div className="absolute bottom-0 left-0 w-48 sm:w-72 md:w-88 lg:w-[380px] h-auto z-30 pointer-events-none">
-        <UploadedBottomLeftPotterySVG className="w-full h-auto drop-shadow-md" />
-      </div>
-
-      {/* Hero Invitation Contents (Floating directly on parchment canvas without card rectangle) */}
-      <div className="relative z-10 px-4 sm:px-12 md:px-16 pt-12 sm:pt-16 pb-16 sm:pb-24 max-w-2xl mx-auto text-center">
+      {/* Hero Invitation Contents */}
+      <div className="relative z-10 px-4 sm:px-12 md:px-16 pt-10 sm:pt-14 pb-16 sm:pb-24 max-w-2xl mx-auto text-center">
         
         {/* Inner Content Container */}
         <div className="space-y-4 sm:space-y-6 relative z-10 max-w-xl mx-auto">
-          
-          {/* Top Tribal Diamond Geometric Emblem (Matching User Uploaded Image) */}
+
+          {/* Top Tribal Diamond Geometric Emblem */}
           <div className="flex justify-center mb-1 sm:mb-2">
-            <UploadedTribalDiamondSymbolSVG size={150} className="drop-shadow-2xs" />
+            <UploadedTribalDiamondSymbolSVG size={160} className="drop-shadow-2xs" />
           </div>
 
           {/* 1. Ceremony Header */}
