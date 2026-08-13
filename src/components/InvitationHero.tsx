@@ -7,7 +7,9 @@ import {
   UploadedVerticalRibbonSVG,
   UploadedHorizontalRibbonSVG,
   UploadedTribalDiamondSymbolSVG,
+  UploadedBottomLeftPotterySVG,
 } from './InvitationDecor';
+import pencilArtPotsImg from '../assets/images/pencil_art_pots_1786608552012.jpg';
 
 interface InvitationHeroProps {
   onOpenCardModal: () => void;
@@ -183,148 +185,157 @@ END:VCALENDAR`;
       </div>
 
       {/* Screen End-to-End Top Corner Overlapping African Woven Baskets */}
-      <div className="absolute -top-2 left-0 w-40 sm:w-56 md:w-64 h-auto z-30 pointer-events-none">
+      <div className="absolute -top-2 left-0 w-44 sm:w-64 md:w-80 h-auto z-30 pointer-events-none">
         <UploadedBasketMotifsSVG className="w-full h-auto drop-shadow-md" />
       </div>
 
-      <div className="absolute -top-2 right-0 w-40 sm:w-56 md:w-64 h-auto z-30 pointer-events-none scale-x-[-1]">
+      <div className="absolute -top-2 right-0 w-44 sm:w-64 md:w-80 h-auto z-30 pointer-events-none scale-x-[-1]">
         <UploadedBasketMotifsSVG className="w-full h-auto drop-shadow-md" />
       </div>
 
-      {/* Hero Content Seamlessly Integrated Without Card Enclosure */}
-      <div className="relative z-10 max-w-2xl mx-auto px-10 sm:px-16 md:px-20 pt-8 sm:pt-12 pb-12 text-center space-y-5 sm:space-y-6">
+      {/* Screen Bottom-Left Pottery, Woven Basket & Draped Fabric Motif (Synchronized with Tribal Pattern) */}
+      <div className="absolute bottom-0 left-0 w-48 sm:w-72 md:w-88 lg:w-[380px] h-auto z-30 pointer-events-none">
+        <UploadedBottomLeftPotterySVG className="w-full h-auto drop-shadow-md" />
+      </div>
+
+      {/* Hero Invitation Contents (Floating directly on parchment canvas without card rectangle) */}
+      <div className="relative z-10 px-4 sm:px-12 md:px-16 pt-12 sm:pt-16 pb-16 sm:pb-24 max-w-2xl mx-auto text-center">
         
-        {/* Top Tribal Diamond Geometric Emblem (Matching User Uploaded Image) */}
-        <div className="flex justify-center mb-1 sm:mb-2">
-          <UploadedTribalDiamondSymbolSVG size={160} className="drop-shadow-2xs" />
-        </div>
-
-        {/* 1. Ceremony Header */}
-        <div className="space-y-1">
-          <h2 className="text-xs sm:text-base md:text-lg font-serif tracking-[0.2em] sm:tracking-[0.25em] font-bold text-[#C15C3D] uppercase leading-snug">
-            NGASYA &amp; MATHAA CEREMONY
-          </h2>
-          <p className="text-[11px] sm:text-sm font-serif tracking-[0.28em] text-[#1E3A2B] font-bold uppercase">
-            INVITATION
-          </p>
-        </div>
-
-        <div className="w-16 sm:w-24 h-[1px] bg-[#D4A359]/40 mx-auto" />
-
-        {/* 2. Subheading Eyebrow */}
-        <p className="text-[10px] sm:text-xs font-serif tracking-[0.25em] uppercase text-[#B8860B] font-bold">
-          TOGETHER WITH THEIR FAMILIES,
-        </p>
-
-        {/* 3. Couple's Names Calligraphy - DOMINANT CENTERPIECE */}
-        <div className="py-2 sm:py-4 space-y-2 sm:space-y-3">
-          <h1 className="font-script text-5xl sm:text-7xl md:text-8xl text-[#B93815] font-bold leading-tight tracking-wide px-1 drop-shadow-2xs">
-            Virginia Mutuku
-          </h1>
-          <div className="flex items-center justify-center gap-3 sm:gap-4 text-[#B8860B] my-2 sm:my-3">
-            <span className="w-12 sm:w-24 h-[1px] bg-[#D4A359]/50" />
-            <span className="font-script text-3xl sm:text-5xl text-[#B93815] font-bold">&amp;</span>
-            <span className="w-12 sm:w-24 h-[1px] bg-[#D4A359]/50" />
+        {/* Inner Content Container */}
+        <div className="space-y-4 sm:space-y-6 relative z-10 max-w-xl mx-auto">
+          
+          {/* Top Tribal Diamond Geometric Emblem (Matching User Uploaded Image) */}
+          <div className="flex justify-center mb-1 sm:mb-2">
+            <UploadedTribalDiamondSymbolSVG size={150} className="drop-shadow-2xs" />
           </div>
-          <h1 className="font-script text-5xl sm:text-7xl md:text-8xl text-[#B93815] font-bold leading-tight tracking-wide px-1 drop-shadow-2xs">
-            Kenneth Abonyo
-          </h1>
-        </div>
 
-        <p className="text-[11px] sm:text-xs font-serif tracking-[0.22em] uppercase text-[#1E3A2B] font-semibold leading-relaxed max-w-md mx-auto px-1">
-          CORDIALLY INVITE YOU TO CELEBRATE THEIR NGASYA &amp; MATHAA CEREMONY
-        </p>
-
-        <div className="w-16 sm:w-24 h-[1px] bg-[#D4A359]/40 mx-auto" />
-
-        {/* 4. Featured Scripture Blessing Card */}
-        <div className="my-3 sm:my-4 px-5 sm:px-8 py-4 bg-[#FAF7F2]/90 backdrop-blur-2xs rounded-xl border border-[#E5E0D8]/80 max-w-md mx-auto text-center space-y-1.5 shadow-2xs">
-          <p className="text-[9px] sm:text-[10px] font-sans tracking-widest font-bold text-[#854D0E] uppercase">
-            SCRIPTURE BLESSING
-          </p>
-          <p className="font-serif italic text-xs sm:text-sm md:text-base text-[#2C3E35] font-medium leading-relaxed">
-            “{WEDDING_DETAILS.bibleVerse.text}”
-          </p>
-          <p className="text-[10px] sm:text-[11px] font-serif tracking-[0.2em] font-bold text-[#EA580C] uppercase pt-0.5">
-            — {WEDDING_DETAILS.bibleVerse.reference} —
-          </p>
-        </div>
-
-        {/* 5. Date & Location Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 max-w-md mx-auto text-center">
-          <div className="p-3.5 rounded-xl bg-[#FAF7F2]/90 backdrop-blur-2xs border border-[#E5E0D8]/80 flex flex-col justify-center items-center shadow-2xs">
-            <span className="text-[9px] sm:text-[10px] font-sans tracking-[0.2em] uppercase font-bold text-[#854D0E] mb-1">
-              DATE
-            </span>
-            <span className="font-serif text-sm sm:text-base font-bold text-[#111827]">
-              OCTOBER 03, 2026
-            </span>
+          {/* 1. Ceremony Header */}
+          <div className="space-y-1">
+            <h2 className="text-xs sm:text-base md:text-lg font-serif tracking-[0.2em] sm:tracking-[0.25em] font-bold text-[#C15C3D] uppercase leading-snug">
+              NGASYA &amp; MATHAA CEREMONY
+            </h2>
+            <p className="text-[11px] sm:text-sm font-serif tracking-[0.28em] text-[#1E3A2B] font-bold uppercase">
+              INVITATION
+            </p>
           </div>
-          <div className="p-3.5 rounded-xl bg-[#FAF7F2]/90 backdrop-blur-2xs border border-[#E5E0D8]/80 flex flex-col justify-center items-center shadow-2xs">
-            <span className="text-[9px] sm:text-[10px] font-sans tracking-[0.2em] uppercase font-bold text-[#854D0E] mb-1">
-              LOCATION
-            </span>
-            <span className="font-serif text-sm sm:text-base font-bold text-[#111827] flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-[#C15C3D] shrink-0" />
-              Country Lodge, Tawa
-            </span>
+
+          <div className="w-16 sm:w-24 h-[1px] bg-[#D4A359]/40 mx-auto" />
+
+          {/* 2. Subheading Eyebrow */}
+          <p className="text-[10px] sm:text-xs font-serif tracking-[0.25em] uppercase text-[#B8860B] font-bold">
+            TOGETHER WITH THEIR FAMILIES,
+          </p>
+
+          {/* 3. Couple's Names Calligraphy - DOMINANT CENTERPIECE */}
+          <div className="py-1 sm:py-3 space-y-1 sm:space-y-2">
+            <h1 className="font-script text-4xl sm:text-6xl md:text-7xl text-[#B93815] font-bold leading-tight tracking-wide px-1">
+              Virginia Mutuku
+            </h1>
+            <div className="flex items-center justify-center gap-3 sm:gap-4 text-[#B8860B] my-1 sm:my-2">
+              <span className="w-10 sm:w-20 h-[1px] bg-[#D4A359]/50" />
+              <span className="font-script text-2xl sm:text-4xl text-[#B93815] font-bold">&amp;</span>
+              <span className="w-10 sm:w-20 h-[1px] bg-[#D4A359]/50" />
+            </div>
+            <h1 className="font-script text-4xl sm:text-6xl md:text-7xl text-[#B93815] font-bold leading-tight tracking-wide px-1">
+              Kenneth Abonyo
+            </h1>
           </div>
-        </div>
 
-        {/* 6. Celebration Details Scroll Indicator */}
-        <div className="pt-6 pb-2 flex flex-col items-center gap-1.5 text-[#B8860B]">
-          <a href="#details" className="group flex flex-col items-center gap-1.5">
-            <span className="text-[10px] font-serif tracking-[0.22em] uppercase font-semibold text-[#1E3A2B]/80 group-hover:text-[#C15C3D] transition-colors">
-              THE CELEBRATION DETAILS
-            </span>
-            <ChevronDown className="w-4 h-4 animate-bounce text-[#C15C3D]" />
-          </a>
-        </div>
+          <p className="text-[10px] sm:text-xs font-serif tracking-[0.2em] uppercase text-[#1E3A2B] font-semibold leading-relaxed max-w-md mx-auto px-1">
+            CORDIALLY INVITE YOU TO CELEBRATE THEIR NGASYA &amp; MATHAA CEREMONY
+          </p>
 
-        {/* 7. Bottom Action Buttons Bar */}
-        <div className="pt-5 border-t border-[#E5E0D8]/60 flex flex-wrap items-center justify-between gap-3 relative z-30 max-w-md mx-auto">
-          {/* Confirm Attendance Pill Button */}
-          <a
-            href="#rsvp"
-            className="px-6 py-2.5 rounded-full bg-[#2C4C3B] hover:bg-[#1E3A2B] text-white font-sans text-xs font-bold flex items-center gap-2 shadow-xs transition-all active:scale-95 uppercase tracking-wider"
-          >
-            <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" />
-            <Check className="w-3.5 h-3.5 text-[#D4A359]" />
-            <span>CONFIRM ATTENDANCE</span>
-          </a>
+          <div className="w-16 sm:w-24 h-[1px] bg-[#D4A359]/40 mx-auto" />
 
-          {/* Quick Action Controls: Music, View Card & Share */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleToggleAudio}
-              className="p-2.5 rounded-full bg-[#FAF7F2] hover:bg-[#F0EAE1] text-[#1E3A2B] border border-[#E5E0D8] transition-all active:scale-95 flex items-center gap-1.5"
-              title={isPlayingAudio ? "Mute Background Music" : "Play Background Music"}
+          {/* 4. Featured Scripture Blessing Card */}
+          <div className="my-3 sm:my-4 px-4 sm:px-6 py-3.5 bg-[#FAF7F2] rounded-xl border border-[#E5E0D8] max-w-md mx-auto text-center space-y-1.5 shadow-2xs">
+            <p className="text-[9px] sm:text-[10px] font-sans tracking-widest font-bold text-[#854D0E] uppercase">
+              SCRIPTURE BLESSING
+            </p>
+            <p className="font-serif italic text-xs sm:text-sm md:text-base text-[#2C3E35] font-medium leading-relaxed">
+              “{WEDDING_DETAILS.bibleVerse.text}”
+            </p>
+            <p className="text-[10px] sm:text-[11px] font-serif tracking-[0.2em] font-bold text-[#EA580C] uppercase pt-0.5">
+              — {WEDDING_DETAILS.bibleVerse.reference} —
+            </p>
+          </div>
+
+          {/* 5. Date & Location Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 max-w-md mx-auto text-center">
+            <div className="p-3 rounded-xl bg-[#FAF7F2] border border-[#E5E0D8] flex flex-col justify-center items-center">
+              <span className="text-[9px] sm:text-[10px] font-sans tracking-[0.2em] uppercase font-bold text-[#854D0E] mb-1">
+                DATE
+              </span>
+              <span className="font-serif text-sm sm:text-base font-bold text-[#111827]">
+                OCTOBER 03, 2026
+              </span>
+            </div>
+            <div className="p-3 rounded-xl bg-[#FAF7F2] border border-[#E5E0D8] flex flex-col justify-center items-center">
+              <span className="text-[9px] sm:text-[10px] font-sans tracking-[0.2em] uppercase font-bold text-[#854D0E] mb-1">
+                LOCATION
+              </span>
+              <span className="font-serif text-sm sm:text-base font-bold text-[#111827] flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-[#C15C3D] shrink-0" />
+                Country Lodge, Tawa
+              </span>
+            </div>
+          </div>
+
+          {/* 6. Celebration Details Scroll Indicator */}
+          <div className="pt-6 pb-2 flex flex-col items-center gap-1.5 text-[#B8860B]">
+            <a href="#details" className="group flex flex-col items-center gap-1.5">
+              <span className="text-[10px] font-serif tracking-[0.22em] uppercase font-semibold text-[#1E3A2B]/80 group-hover:text-[#C15C3D] transition-colors">
+                THE CELEBRATION DETAILS
+              </span>
+              <ChevronDown className="w-4 h-4 animate-bounce text-[#C15C3D]" />
+            </a>
+          </div>
+
+          {/* 7. Bottom Action Buttons Bar */}
+          <div className="pt-5 border-t border-[#E5E0D8] flex flex-wrap items-center justify-between gap-3 relative z-30">
+            {/* Confirm Attendance Pill Button */}
+            <a
+              href="#rsvp"
+              className="px-6 py-2.5 rounded-full bg-[#2C4C3B] hover:bg-[#1E3A2B] text-white font-sans text-xs font-bold flex items-center gap-2 shadow-xs transition-all active:scale-95 uppercase tracking-wider"
             >
-              {isPlayingAudio ? (
-                <Volume2 className="w-4 h-4 text-[#C15C3D] animate-pulse" />
-              ) : (
-                <VolumeX className="w-4 h-4 text-[#1E3A2B]" />
-              )}
-            </button>
+              <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" />
+              <Check className="w-3.5 h-3.5 text-[#D4A359]" />
+              <span>CONFIRM ATTENDANCE</span>
+            </a>
 
-            <button
-              onClick={onOpenCardModal}
-              className="p-2.5 rounded-full bg-[#FAF7F2] hover:bg-[#F0EAE1] text-[#1E3A2B] border border-[#E5E0D8] transition-all active:scale-95"
-              title="View Full Card Image"
-            >
-              <ImageIcon className="w-4 h-4 text-[#1E3A2B]" />
-            </button>
+            {/* Quick Action Controls: Music, View Card & Share */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleToggleAudio}
+                className="p-2.5 rounded-full bg-[#FAF7F2] hover:bg-[#F0EAE1] text-[#1E3A2B] border border-[#E5E0D8] transition-all active:scale-95 flex items-center gap-1.5"
+                title={isPlayingAudio ? "Mute Background Music" : "Play Background Music"}
+              >
+                {isPlayingAudio ? (
+                  <Volume2 className="w-4 h-4 text-[#C15C3D] animate-pulse" />
+                ) : (
+                  <VolumeX className="w-4 h-4 text-[#1E3A2B]" />
+                )}
+              </button>
 
-            <button
-              onClick={handleShare}
-              className="p-2.5 rounded-full bg-[#FAF7F2] hover:bg-[#F0EAE1] text-[#1E3A2B] border border-[#E5E0D8] transition-all active:scale-95"
-              title="Share Invitation"
-            >
-              <Share2 className="w-4 h-4 text-[#1E3A2B]" />
-            </button>
+              <button
+                onClick={onOpenCardModal}
+                className="p-2.5 rounded-full bg-[#FAF7F2] hover:bg-[#F0EAE1] text-[#1E3A2B] border border-[#E5E0D8] transition-all active:scale-95"
+                title="View Full Card Image"
+              >
+                <ImageIcon className="w-4 h-4 text-[#1E3A2B]" />
+              </button>
+
+              <button
+                onClick={handleShare}
+                className="p-2.5 rounded-full bg-[#FAF7F2] hover:bg-[#F0EAE1] text-[#1E3A2B] border border-[#E5E0D8] transition-all active:scale-95"
+                title="Share Invitation"
+              >
+                <Share2 className="w-4 h-4 text-[#1E3A2B]" />
+              </button>
+            </div>
           </div>
-        </div>
 
+        </div>
       </div>
     </section>
   );
