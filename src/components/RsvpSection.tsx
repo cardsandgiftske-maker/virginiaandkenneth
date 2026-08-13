@@ -103,8 +103,8 @@ export const RsvpSection: React.FC = () => {
           email: formData.email.trim() || undefined,
           attending: formData.attending,
           guestCount: formData.attending === 'yes' ? formData.guestCount : 0,
-          dietary: formData.dietary.trim() || undefined,
-          message: formData.message.trim() || undefined,
+          dietary: formData.dietary.trim(),
+          message: formData.message.trim(),
         });
       } else {
         firestoreDocId = await submitRsvpToFirestore({
@@ -113,8 +113,8 @@ export const RsvpSection: React.FC = () => {
           email: formData.email.trim() || undefined,
           attending: formData.attending,
           guestCount: formData.attending === 'yes' ? formData.guestCount : 0,
-          dietary: formData.dietary.trim() || undefined,
-          message: formData.message.trim() || undefined,
+          dietary: formData.dietary.trim(),
+          message: formData.message.trim(),
         });
       }
 
