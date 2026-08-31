@@ -49,7 +49,7 @@ export const RsvpSection: React.FC = () => {
         phone: submittedRsvp.phone || '',
         email: submittedRsvp.email || '',
         attending: submittedRsvp.attending || 'yes',
-        guestCount: submittedRsvp.guestCount || 1,
+        guestCount: Math.min(2, Math.max(1, submittedRsvp.guestCount || 1)),
         dietary: submittedRsvp.dietary || '',
         message: submittedRsvp.message || '',
       });
@@ -103,7 +103,7 @@ export const RsvpSection: React.FC = () => {
         phone: cleanedPhone,
         email: formData.email.trim() || null,
         attending: formData.attending,
-        guestCount: formData.attending === 'yes' ? formData.guestCount : 0,
+        guestCount: formData.attending === 'yes' ? Math.min(2, Math.max(1, formData.guestCount)) : 0,
         dietary: formData.dietary.trim() || null,
         message: formData.message.trim() || null,
       };
@@ -120,7 +120,7 @@ export const RsvpSection: React.FC = () => {
         phone: cleanedPhone,
         email: formData.email.trim() || null,
         attending: formData.attending,
-        guestCount: formData.attending === 'yes' ? formData.guestCount : 0,
+        guestCount: formData.attending === 'yes' ? Math.min(2, Math.max(1, formData.guestCount)) : 0,
         dietary: formData.dietary.trim() || null,
         message: formData.message.trim(),
         submittedAt: new Date().toISOString(),
@@ -315,18 +315,15 @@ export const RsvpSection: React.FC = () => {
               <>
                 <div>
                   <label className="block text-xs font-sans uppercase font-bold text-[#1E3A2B] mb-1">
-                    Number of Guests
+                    Number of Guests <span className="text-gray-500 font-normal text-[11px]">(Maximum 2)</span>
                   </label>
                   <select
                     value={formData.guestCount}
-                    onChange={(e) => setFormData({ ...formData, guestCount: parseInt(e.target.value) })}
+                    onChange={(e) => setFormData({ ...formData, guestCount: Math.min(2, Math.max(1, parseInt(e.target.value) || 1)) })}
                     className="w-full px-4 py-3 rounded-xl bg-white border border-[#D4A359]/60 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
                   >
-                    <option value={1}>1 Person</option>
-                    <option value={2}>2 People</option>
-                    <option value={3}>3 People</option>
-                    <option value={4}>4 People</option>
-                    <option value={5}>5+ Family Group</option>
+                    <option value={1}>1 Guest (Myself only)</option>
+                    <option value={2}>2 Guests (Myself + 1 Plus-One)</option>
                   </select>
                 </div>
 
