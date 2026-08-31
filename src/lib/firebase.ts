@@ -48,7 +48,7 @@ export function sanitizeRsvpData(data: Partial<RsvpData>): Record<string, any> {
     clean.attending = data.attending;
   }
   if (data.guestCount !== undefined && data.guestCount !== null) {
-    clean.guestCount = data.attending === 'no' ? 0 : Number(data.guestCount) || 1;
+    clean.guestCount = data.attending === 'no' ? 0 : Math.min(2, Math.max(1, Number(data.guestCount) || 1));
   }
 
   // Optional fields: store trimmed string or null (never undefined)
