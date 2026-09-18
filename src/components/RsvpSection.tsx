@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { Heart, CheckCircle2, Phone, Users, AlertCircle, Calendar, MapPin, Download, Edit3, Sparkles, Loader2, MessageSquare } from 'lucide-react';
+import { Heart, CheckCircle2, Phone, Users, AlertCircle, Calendar, MapPin, Download, Edit3, Sparkles, Loader2, MessageSquare, Clock, Lock, Search, MessageCircle } from 'lucide-react';
 import { RsvpResponse } from '../types';
 import { WEDDING_DETAILS } from '../data/weddingData';
 import { submitRsvpToFirestore, getRecentRsvpsFromFirestore, findRsvpByPhone, updateRsvpInFirestore } from '../lib/firebase';
@@ -21,6 +21,11 @@ export const RsvpSection: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [recentWishes, setRecentWishes] = useState<any[]>([]);
+
+  // Pass retrieval state for closed RSVP
+  const [lookupPhone, setLookupPhone] = useState('');
+  const [isLookingUp, setIsLookingUp] = useState(false);
+  const [lookupError, setLookupError] = useState('');
 
   useEffect(() => {
     // Check if RSVP exists in localStorage
@@ -43,6 +48,7 @@ export const RsvpSection: React.FC = () => {
   };
 
   const handleStartEdit = () => {
+    if (WEDDING_DETAILS.isRsvpClosed) return;
     if (submittedRsvp) {
       setFormData({
         name: submittedRsvp.name || '',
@@ -57,9 +63,57 @@ export const RsvpSection: React.FC = () => {
     setIsEditing(true);
   };
 
+  const handleLookupPass = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLookupError('');
+    const cleaned = lookupPhone.trim();
+    if (!cleaned) {
+      setLookupError('Please enter the phone number you used to RSVP.');
+      return;
+    }
+
+    setIsLookingUp(true);
+    try {
+      const existingDoc = await findRsvpByPhone(cleaned);
+      if (existingDoc) {
+        const loadedRsvp: RsvpResponse = {
+          id: existingDoc.id,
+          name: existingDoc.fullName,
+          phone: existingDoc.phone,
+          email: existingDoc.email || null,
+          attending: existingDoc.attending,
+          guestCount: existingDoc.guestCount,
+          dietary: existingDoc.dietary || null,
+          message: existingDoc.message || '',
+          submittedAt: new Date().toISOString(),
+        };
+        localStorage.setItem('vk_wedding_rsvp', JSON.stringify(loadedRsvp));
+        setSubmittedRsvp(loadedRsvp);
+        setLookupPhone('');
+      } else {
+        setLookupError(`No RSVP record found for phone "${cleaned}". If you submitted under a different number or directly with the couple, please contact Virginia & Kenneth.`);
+      }
+    } catch (err: any) {
+      setLookupError('Could not check RSVP records. Please verify your internet connection.');
+    } finally {
+      setIsLookingUp(false);
+    }
+  };
+
+  const handleClearPass = () => {
+    localStorage.removeItem('vk_wedding_rsvp');
+    setSubmittedRsvp(null);
+    setIsEditing(false);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
+
+    if (WEDDING_DETAILS.isRsvpClosed) {
+      setErrorMessage('RSVP is now closed as the deadline has passed.');
+      return;
+    }
 
     const cleanedPhone = formData.phone.trim();
     if (!formData.name.trim() || !cleanedPhone) {
@@ -161,22 +215,39 @@ export const RsvpSection: React.FC = () => {
 
           {/* Section Title */}
           <div className="text-center space-y-3 mb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1E3A2B] text-[#D4A359] text-xs font-semibold uppercase tracking-widest border border-[#D4A359]">
-              <Heart className="w-3.5 h-3.5 fill-[#D4A359]" />
-              <span>Kindly RSVP</span>
-            </div>
+            {WEDDING_DETAILS.isRsvpClosed ? (
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#8C3A27] text-[#FDF8F2] text-xs font-semibold uppercase tracking-widest border border-[#D4A359] shadow-xs">
+                <Clock className="w-3.5 h-3.5 text-[#D4A359]" />
+                <span>RSVP Period Closed</span>
+              </div>
+            ) : (
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1E3A2B] text-[#D4A359] text-xs font-semibold uppercase tracking-widest border border-[#D4A359]">
+                <Heart className="w-3.5 h-3.5 fill-[#D4A359]" />
+                <span>Kindly RSVP</span>
+              </div>
+            )}
 
             <h2 className="text-3xl sm:text-4xl font-serif text-[#1E3A2B] font-bold">
-              Confirm Your Attendance
+              {WEDDING_DETAILS.isRsvpClosed
+                ? (submittedRsvp ? "Your Confirmed Guest Pass" : "RSVP is Now Closed")
+                : "Confirm Your Attendance"}
             </h2>
 
             <p className="max-w-lg mx-auto text-xs sm:text-sm text-[#2C4C3B] font-sans">
-              Please confirm your attendance by <strong className="text-[#C15C3D] font-bold">15th September 2026</strong>.
+              {WEDDING_DETAILS.isRsvpClosed ? (
+                <>
+                  The RSVP deadline was <strong className="text-[#C15C3D] font-bold">{WEDDING_DETAILS.rsvpDeadline}</strong>. Venue catering &amp; seating arrangements have been finalized with Country Lodge Tawa.
+                </>
+              ) : (
+                <>
+                  Please confirm your attendance by <strong className="text-[#C15C3D] font-bold">{WEDDING_DETAILS.rsvpDeadline}</strong>.
+                </>
+              )}
             </p>
           </div>
 
-        {/* Display Confirmation Pass if Already Submitted and Not Editing */}
-        {submittedRsvp && !isEditing ? (
+        {/* 1. Display Confirmation Pass if Already Submitted */}
+        {submittedRsvp && (!isEditing || WEDDING_DETAILS.isRsvpClosed) ? (
           <div className="max-w-lg mx-auto bg-[#F5ECE0] border border-[#D4A359] rounded-2xl p-6 shadow-md text-center space-y-4">
             
             <div className="w-12 h-12 mx-auto rounded-full bg-[#1E3A2B] text-[#D4A359] flex items-center justify-center">
@@ -195,6 +266,19 @@ export const RsvpSection: React.FC = () => {
               </p>
             </div>
 
+            {/* Closed RSVP Locked Notice */}
+            {WEDDING_DETAILS.isRsvpClosed && (
+              <div className="p-3 bg-[#FAF6EE] rounded-xl border border-[#D4A359]/60 flex items-start gap-2.5 text-left text-xs text-[#1E3A2B]">
+                <Lock className="w-4 h-4 text-[#8C3A27] shrink-0 mt-0.5" />
+                <div>
+                  <strong className="block text-[#8C3A27] font-bold mb-0.5">Attendance Confirmed &amp; Locked</strong>
+                  <p className="text-gray-600 text-[11px] leading-relaxed">
+                    RSVPs are now officially closed. If you have any urgent updates or questions, please contact the couple directly.
+                  </p>
+                </div>
+              </div>
+            )}
+
             <div className="p-4 bg-[#FDF8F2] rounded-xl border border-[#D4A359]/40 text-left space-y-2 text-xs font-sans">
               <div className="flex justify-between border-b border-gray-200 pb-2">
                 <span className="text-gray-600">Status:</span>
@@ -210,6 +294,13 @@ export const RsvpSection: React.FC = () => {
                 </div>
               )}
 
+              {submittedRsvp.dietary && (
+                <div className="flex justify-between border-b border-gray-200 pb-2">
+                  <span className="text-gray-600">Dietary:</span>
+                  <span className="font-bold text-[#1E3A2B]">{submittedRsvp.dietary}</span>
+                </div>
+              )}
+
               <div className="flex justify-between pt-1">
                 <span className="text-gray-600">Venue:</span>
                 <span className="font-bold text-[#1E3A2B]">Country Lodge, Tawa</span>
@@ -222,19 +313,144 @@ export const RsvpSection: React.FC = () => {
               </p>
             )}
 
-            <div className="pt-2 flex items-center justify-center gap-3">
+            {/* Actions for pass */}
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2.5">
+              {!WEDDING_DETAILS.isRsvpClosed ? (
+                <button
+                  onClick={handleStartEdit}
+                  className="w-full sm:w-auto px-4 py-2 rounded-xl bg-[#1E3A2B] text-white text-xs font-medium flex items-center justify-center gap-1.5 hover:bg-[#2C4C3B] transition-colors"
+                >
+                  <Edit3 className="w-3.5 h-3.5 text-[#D4A359]" />
+                  <span>Update Response</span>
+                </button>
+              ) : (
+                <>
+                  <a
+                    href={`https://wa.me/254741912468?text=${encodeURIComponent(
+                      `Hello Virginia & Kenneth, I am reaching out regarding my RSVP guest pass for ${submittedRsvp.name}.`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full sm:w-auto px-4 py-2 rounded-xl bg-[#25D366] text-white text-xs font-medium flex items-center justify-center gap-1.5 hover:bg-[#1EBE5D] transition-colors shadow-xs"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    <span>WhatsApp Virginia &amp; Kenneth</span>
+                  </a>
+
+                  <a
+                    href={`tel:${WEDDING_DETAILS.rsvpPhone}`}
+                    className="w-full sm:w-auto px-4 py-2 rounded-xl bg-[#1E3A2B] text-white text-xs font-medium flex items-center justify-center gap-1.5 hover:bg-[#2C4C3B] transition-colors"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-[#D4A359]" />
+                    <span>Call {WEDDING_DETAILS.formattedRsvpPhone}</span>
+                  </a>
+                </>
+              )}
+
               <button
-                onClick={handleStartEdit}
-                className="px-4 py-2 rounded-xl bg-[#1E3A2B] text-white text-xs font-medium flex items-center gap-1.5 hover:bg-[#2C4C3B] transition-colors"
+                onClick={handleClearPass}
+                className="text-[11px] text-[#8C3A27] hover:underline font-sans pt-1 sm:pt-0"
               >
-                <Edit3 className="w-3.5 h-3.5 text-[#D4A359]" />
-                <span>Update Response</span>
+                Look up different number
               </button>
             </div>
 
           </div>
+        ) : WEDDING_DETAILS.isRsvpClosed ? (
+          /* 2. Closed RSVP Card with Look Up Feature */
+          <div className="max-w-xl mx-auto space-y-6">
+            
+            {/* Notice Banner Card */}
+            <div className="bg-[#FAF6EE] border-2 border-[#D4A359]/70 rounded-2xl p-6 text-center space-y-4 shadow-sm">
+              <div className="w-14 h-14 mx-auto rounded-full bg-[#1E3A2B] text-[#D4A359] flex items-center justify-center border-2 border-[#D4A359]">
+                <Clock className="w-7 h-7 text-[#D4A359]" />
+              </div>
+
+              <div className="space-y-2">
+                <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#1E3A2B]">
+                  Thank You for Your Love &amp; Support!
+                </h3>
+                <p className="text-xs sm:text-sm text-[#2C4C3B] font-sans leading-relaxed">
+                  The RSVP period for Virginia Mutuku &amp; Kenneth Abonyo's ceremony is now officially closed as of <strong>15th September 2026</strong>. Catering, seating, and venue coordination at Country Lodge Tawa have been finalized.
+                </p>
+              </div>
+
+              {/* Direct Contact Buttons */}
+              <div className="pt-2 flex flex-wrap items-center justify-center gap-2.5">
+                <a
+                  href={`https://wa.me/254741912468?text=${encodeURIComponent(
+                    'Hello Virginia & Kenneth! I have an inquiry regarding your upcoming Ngasya & Mathaa ceremony on October 3, 2026.'
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs font-bold font-sans flex items-center gap-1.5 shadow-sm transition-all"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  <span>Message on WhatsApp</span>
+                </a>
+
+                <a
+                  href={`tel:${WEDDING_DETAILS.rsvpPhone}`}
+                  className="px-4 py-2.5 rounded-xl bg-[#1E3A2B] hover:bg-[#2C4C3B] text-[#FDF8F2] text-xs font-bold font-sans flex items-center gap-1.5 shadow-sm transition-all border border-[#D4A359]/50"
+                >
+                  <Phone className="w-3.5 h-3.5 text-[#D4A359]" />
+                  <span>Call {WEDDING_DETAILS.formattedRsvpPhone}</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Pass Retrieval Card for already confirmed guests */}
+            <div className="bg-[#FDF8F2] border border-[#D4A359]/60 rounded-2xl p-5 shadow-xs">
+              <div className="flex items-center gap-2 mb-2 text-[#1E3A2B]">
+                <Search className="w-4 h-4 text-[#C15C3D]" />
+                <h4 className="font-serif font-bold text-sm">
+                  Already RSVP'd earlier? Retrieve your Guest Pass
+                </h4>
+              </div>
+              <p className="text-xs text-gray-600 mb-3">
+                Enter the phone number you used when confirming your attendance to view your pass:
+              </p>
+
+              <form onSubmit={handleLookupPass} className="space-y-3">
+                <div className="flex gap-2">
+                  <input
+                    type="tel"
+                    placeholder="e.g. 0712 345 678"
+                    value={lookupPhone}
+                    onChange={(e) => setLookupPhone(e.target.value)}
+                    className="flex-1 px-3.5 py-2.5 rounded-xl bg-white border border-[#D4A359]/60 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
+                  />
+                  <button
+                    type="submit"
+                    disabled={isLookingUp}
+                    className="px-4 py-2.5 rounded-xl bg-[#1E3A2B] hover:bg-[#2C4C3B] text-white text-xs font-bold transition-all disabled:opacity-60 shrink-0 flex items-center gap-1.5 cursor-pointer"
+                  >
+                    {isLookingUp ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin text-[#D4A359]" />
+                        <span>Searching...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Search className="w-3.5 h-3.5 text-[#D4A359]" />
+                        <span>Find Pass</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {lookupError && (
+                  <div className="p-2.5 bg-red-50 border border-red-200 rounded-xl text-red-700 text-xs flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    <span>{lookupError}</span>
+                  </div>
+                )}
+              </form>
+            </div>
+
+          </div>
         ) : (
-          /* RSVP Form */
+          /* 3. Open RSVP Form (When RSVP is open) */
           <form onSubmit={handleSubmit} className="max-w-xl mx-auto space-y-5">
             
             {/* Attendance Toggle */}
