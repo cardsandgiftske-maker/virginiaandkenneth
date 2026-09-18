@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Calendar, Heart, MapPin, Gift, MessageSquare, Volume2, VolumeX, Menu, X, Sparkles, Image as ImageIcon } from 'lucide-react';
+import { WEDDING_DETAILS } from '../data/weddingData';
 
 interface NavbarProps {
   onOpenCardModal: () => void;
@@ -17,7 +18,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   const navLinks = [
     { name: 'Invitation', href: '#invitation' },
     { name: 'Countdown', href: '#countdown' },
-    { name: 'RSVP', href: '#rsvp', highlight: true },
+    { 
+      name: WEDDING_DETAILS.isRsvpClosed ? 'RSVP (Closed)' : 'RSVP', 
+      href: '#rsvp', 
+      highlight: !WEDDING_DETAILS.isRsvpClosed 
+    },
     { name: 'Venue', href: '#venue' },
     { name: 'Gifting', href: '#gifting' },
   ];
