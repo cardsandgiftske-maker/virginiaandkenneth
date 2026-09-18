@@ -10,6 +10,7 @@ import { AdminModal } from './components/AdminModal';
 import { FlowingVineConnector } from './components/SectionFlowDividers';
 import { VintageEnvelopeWrapper } from './components/VintageEnvelopeWrapper';
 import { weddingAudio } from './lib/weddingAudio';
+import { WEDDING_DETAILS } from './data/weddingData';
 
 export default function App() {
   const [isCardModalOpen, setIsCardModalOpen] = useState(false);
@@ -47,7 +48,7 @@ export default function App() {
           <VenueSection />
 
           {/* Story Connector 3 */}
-          <FlowingVineConnector label="Confirm Attendance" />
+          <FlowingVineConnector label={WEDDING_DETAILS.isRsvpClosed ? "RSVP & Guest Pass" : "Confirm Attendance"} />
 
           {/* SECTION 4: Interactive RSVP Form */}
           <RsvpSection />
