@@ -13,6 +13,8 @@ export const WEDDING_DETAILS = {
   rsvpPhone: "0741912468",
   formattedRsvpPhone: "+254 741 912 468",
   rsvpDeadline: "15th September 2026",
+  isRsvpClosed: true,
+  rsvpClosedNote: "The RSVP deadline of 15th September 2026 has passed and attendance confirmations are now closed. Guest lists and arrangements have been finalized with Country Lodge Tawa.",
   mpesaNumber: "9490765",
   tillNumber: "9490765",
   mpesaName: "Virginia / Kenneth",
