@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapPin, Share2, ChevronDown, Check, Volume2, VolumeX, Image as ImageIcon } from 'lucide-react';
+import { MapPin, Share2, ChevronDown, Check, Volume2, VolumeX, Image as ImageIcon, Clock } from 'lucide-react';
 import { WEDDING_DETAILS } from '../data/weddingData';
 import { weddingAudio } from '../lib/weddingAudio';
 import { UploadedTribalDiamondSymbolSVG } from './InvitationDecor';
@@ -272,15 +272,25 @@ END:VCALENDAR`;
 
           {/* 7. Bottom Action Buttons Bar */}
           <div className="pt-5 border-t border-[#E5E0D8] flex flex-wrap items-center justify-between gap-3 relative z-30">
-            {/* Confirm Attendance Pill Button */}
-            <a
-              href="#rsvp"
-              className="px-6 py-2.5 rounded-full bg-[#2C4C3B] hover:bg-[#1E3A2B] text-white font-sans text-xs font-bold flex items-center gap-2 shadow-xs transition-all active:scale-95 uppercase tracking-wider"
-            >
-              <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" />
-              <Check className="w-3.5 h-3.5 text-[#D4A359]" />
-              <span>CONFIRM ATTENDANCE</span>
-            </a>
+            {/* Confirm Attendance / View Pass Pill Button */}
+            {WEDDING_DETAILS.isRsvpClosed ? (
+              <a
+                href="#rsvp"
+                className="px-5 py-2.5 rounded-full bg-[#8C3A27] hover:bg-[#742F1F] text-white font-sans text-xs font-bold flex items-center gap-2 shadow-xs transition-all active:scale-95 uppercase tracking-wider"
+              >
+                <Clock className="w-3.5 h-3.5 text-[#D4A359]" />
+                <span>RSVP CLOSED • VIEW PASS</span>
+              </a>
+            ) : (
+              <a
+                href="#rsvp"
+                className="px-6 py-2.5 rounded-full bg-[#2C4C3B] hover:bg-[#1E3A2B] text-white font-sans text-xs font-bold flex items-center gap-2 shadow-xs transition-all active:scale-95 uppercase tracking-wider"
+              >
+                <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse" />
+                <Check className="w-3.5 h-3.5 text-[#D4A359]" />
+                <span>CONFIRM ATTENDANCE</span>
+              </a>
+            )}
 
             {/* Quick Action Controls: Music, View Card & Share */}
             <div className="flex items-center gap-2">
