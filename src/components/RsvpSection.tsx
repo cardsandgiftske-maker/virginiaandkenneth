@@ -20,11 +20,9 @@ export const RsvpSection: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [successNote, setSuccessNote] = useState('');
   const [recentWishes, setRecentWishes] = useState<any[]>([]);
 
-  // Pass retrieval state
-  const [showLookup, setShowLookup] = useState(false);
+  // Pass retrieval state for closed RSVP
   const [lookupPhone, setLookupPhone] = useState('');
   const [isLookingUp, setIsLookingUp] = useState(false);
   const [lookupError, setLookupError] = useState('');
@@ -63,8 +61,6 @@ export const RsvpSection: React.FC = () => {
       });
     }
     setIsEditing(true);
-    setSuccessNote('');
-    setErrorMessage('');
   };
 
   const handleLookupPass = async (e: React.FormEvent) => {
@@ -93,11 +89,9 @@ export const RsvpSection: React.FC = () => {
         };
         localStorage.setItem('vk_wedding_rsvp', JSON.stringify(loadedRsvp));
         setSubmittedRsvp(loadedRsvp);
-        setIsEditing(false);
         setLookupPhone('');
-        setShowLookup(false);
       } else {
-        setLookupError(`No RSVP record found for phone "${cleaned}". You can fill out the form below to submit your RSVP.`);
+        setLookupError(`No RSVP record found for phone "${cleaned}". If you submitted under a different number or directly with the couple, please contact Virginia & Kenneth.`);
       }
     } catch (err: any) {
       setLookupError('Could not check RSVP records. Please verify your internet connection.');
@@ -110,23 +104,11 @@ export const RsvpSection: React.FC = () => {
     localStorage.removeItem('vk_wedding_rsvp');
     setSubmittedRsvp(null);
     setIsEditing(false);
-    setFormData({
-      name: '',
-      phone: '',
-      email: '',
-      attending: 'yes',
-      guestCount: 1,
-      dietary: '',
-      message: '',
-    });
-    setSuccessNote('');
-    setErrorMessage('');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
-    setSuccessNote('');
 
     if (WEDDING_DETAILS.isRsvpClosed) {
       setErrorMessage('RSVP is now closed as the deadline has passed.');
@@ -145,7 +127,30 @@ export const RsvpSection: React.FC = () => {
       // 1. Check if phone number already exists in Firestore
       const existingDoc = await findRsvpByPhone(cleanedPhone);
 
-      let firestoreDocId = (isEditing && submittedRsvp?.id) ? submittedRsvp.id : (existingDoc?.id || null);
+      // If existing document found and it's NOT the user's current edit session:
+      if (existingDoc && (!isEditing || (submittedRsvp && submittedRsvp.id !== existingDoc.id))) {
+        // If current user didn't have local pass set, set it to existing pass and notify them
+        if (!submittedRsvp) {
+          const loadedRsvp: RsvpResponse = {
+            id: existingDoc.id,
+            name: existingDoc.fullName,
+            phone: existingDoc.phone,
+            email: existingDoc.email || null,
+            attending: existingDoc.attending,
+            guestCount: existingDoc.guestCount,
+            dietary: existingDoc.dietary || null,
+            message: existingDoc.message || '',
+            submittedAt: new Date().toISOString(),
+          };
+          localStorage.setItem('vk_wedding_rsvp', JSON.stringify(loadedRsvp));
+          setSubmittedRsvp(loadedRsvp);
+        }
+        setErrorMessage(`An RSVP has already been submitted for phone number "${cleanedPhone}". Each phone number can only RSVP once.`);
+        setIsSubmitting(false);
+        return;
+      }
+
+      let firestoreDocId = submittedRsvp?.id || existingDoc?.id;
 
       const rsvpPayload = {
         fullName: formData.name.trim(),
@@ -157,14 +162,10 @@ export const RsvpSection: React.FC = () => {
         message: formData.message.trim() || null,
       };
 
-      if (firestoreDocId && !firestoreDocId.startsWith('local-')) {
-        // Seamless update if record exists for this phone or during edit session
+      if (isEditing && firestoreDocId && !firestoreDocId.startsWith('local-')) {
         await updateRsvpInFirestore(firestoreDocId, rsvpPayload);
-        setSuccessNote('Your RSVP has been updated successfully!');
       } else {
-        // New submission
         firestoreDocId = await submitRsvpToFirestore(rsvpPayload);
-        setSuccessNote('Thank you! Your RSVP confirmation has been received.');
       }
 
       const rsvp: RsvpResponse = {
@@ -229,17 +230,13 @@ export const RsvpSection: React.FC = () => {
             <h2 className="text-3xl sm:text-4xl font-serif text-[#1E3A2B] font-bold">
               {WEDDING_DETAILS.isRsvpClosed
                 ? (submittedRsvp ? "Your Confirmed Guest Pass" : "RSVP is Now Closed")
-                : (submittedRsvp && !isEditing ? "Your Confirmed Guest Pass" : isEditing ? "Update Your RSVP" : "Confirm Your Attendance")}
+                : "Confirm Your Attendance"}
             </h2>
 
             <p className="max-w-lg mx-auto text-xs sm:text-sm text-[#2C4C3B] font-sans">
               {WEDDING_DETAILS.isRsvpClosed ? (
                 <>
                   The RSVP deadline was <strong className="text-[#C15C3D] font-bold">{WEDDING_DETAILS.rsvpDeadline}</strong>. Venue catering &amp; seating arrangements have been finalized with Country Lodge Tawa.
-                </>
-              ) : isEditing ? (
-                <>
-                  Updating attendance response for <strong className="text-[#C15C3D] font-bold">{formData.name || submittedRsvp?.name}</strong>.
                 </>
               ) : (
                 <>
@@ -321,7 +318,7 @@ export const RsvpSection: React.FC = () => {
               {!WEDDING_DETAILS.isRsvpClosed ? (
                 <button
                   onClick={handleStartEdit}
-                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#1E3A2B] text-white text-xs font-medium flex items-center justify-center gap-1.5 hover:bg-[#2C4C3B] transition-colors shadow-xs cursor-pointer"
+                  className="w-full sm:w-auto px-4 py-2 rounded-xl bg-[#1E3A2B] text-white text-xs font-medium flex items-center justify-center gap-1.5 hover:bg-[#2C4C3B] transition-colors"
                 >
                   <Edit3 className="w-3.5 h-3.5 text-[#D4A359]" />
                   <span>Update Response</span>
@@ -352,9 +349,9 @@ export const RsvpSection: React.FC = () => {
 
               <button
                 onClick={handleClearPass}
-                className="text-[11px] text-[#8C3A27] hover:underline font-sans pt-1 sm:pt-0 cursor-pointer"
+                className="text-[11px] text-[#8C3A27] hover:underline font-sans pt-1 sm:pt-0"
               >
-                Submit or Look up another RSVP
+                Look up different number
               </button>
             </div>
 
@@ -454,249 +451,155 @@ export const RsvpSection: React.FC = () => {
           </div>
         ) : (
           /* 3. Open RSVP Form (When RSVP is open) */
-          <div className="max-w-xl mx-auto space-y-4">
+          <form onSubmit={handleSubmit} className="max-w-xl mx-auto space-y-5">
             
-            {/* Editing Existing RSVP Banner */}
-            {isEditing && (
-              <div className="p-3.5 bg-[#FAF6EE] border border-[#D4A359] rounded-2xl flex items-center justify-between gap-3 text-xs text-[#1E3A2B] shadow-xs">
-                <div className="flex items-center gap-2">
-                  <Edit3 className="w-4 h-4 text-[#C15C3D] shrink-0" />
-                  <span>Modifying your RSVP details. Changes will immediately update in Firestore.</span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setIsEditing(false)}
-                  className="text-[#8C3A27] hover:underline font-bold text-xs shrink-0 cursor-pointer"
-                >
-                  Cancel
-                </button>
-              </div>
-            )}
+            {/* Attendance Toggle */}
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, attending: 'yes' })}
+                className={`p-4 rounded-2xl border text-center font-sans text-sm font-bold transition-all ${
+                  formData.attending === 'yes'
+                    ? 'bg-[#1E3A2B] text-[#FDF8F2] border-[#D4A359] shadow-md'
+                    : 'bg-[#F5ECE0]/60 text-[#2C4C3B] border-[#D4A359]/40 hover:bg-[#F5ECE0]'
+                }`}
+              >
+                <span className="block text-base">Joyfully Accepts 🎉</span>
+                <span className="text-[11px] font-normal opacity-80">I will be there to celebrate!</span>
+              </button>
 
-            {/* Quick Lookup Toggle for Returning Guests */}
-            {!isEditing && (
-              <div className="text-center pb-1">
-                <button
-                  type="button"
-                  onClick={() => setShowLookup(!showLookup)}
-                  className="inline-flex items-center gap-1.5 text-xs text-[#1E3A2B] hover:text-[#C15C3D] font-medium underline cursor-pointer"
-                >
-                  <Search className="w-3.5 h-3.5 text-[#C15C3D]" />
-                  <span>{showLookup ? "Hide pass lookup" : "Already RSVP'd? Look up your digital pass by phone number"}</span>
-                </button>
-              </div>
-            )}
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, attending: 'no' })}
+                className={`p-4 rounded-2xl border text-center font-sans text-sm font-bold transition-all ${
+                  formData.attending === 'no'
+                    ? 'bg-[#C15C3D] text-white border-[#C15C3D] shadow-md'
+                    : 'bg-[#F5ECE0]/60 text-[#2C4C3B] border-[#D4A359]/40 hover:bg-[#F5ECE0]'
+                }`}
+              >
+                <span className="block text-base">Regretfully Declines</span>
+                <span className="text-[11px] font-normal opacity-80">Sending warm blessings from afar</span>
+              </button>
+            </div>
 
-            {/* Expandable Pass Lookup Form */}
-            {showLookup && !isEditing && (
-              <div className="bg-[#FAF6EE] border border-[#D4A359]/70 rounded-2xl p-4 space-y-3 mb-2 shadow-xs">
-                <p className="text-xs text-[#2C4C3B]">
-                  Enter the phone number you used to RSVP to pull up your existing guest pass:
-                </p>
-                <form onSubmit={handleLookupPass} className="flex gap-2">
-                  <input
-                    type="tel"
-                    placeholder="e.g. 0712 345 678"
-                    value={lookupPhone}
-                    onChange={(e) => setLookupPhone(e.target.value)}
-                    className="flex-1 px-3.5 py-2.5 rounded-xl bg-white border border-[#D4A359]/60 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
-                  />
-                  <button
-                    type="submit"
-                    disabled={isLookingUp}
-                    className="px-4 py-2.5 rounded-xl bg-[#1E3A2B] hover:bg-[#2C4C3B] text-white text-xs font-bold transition-all disabled:opacity-60 shrink-0 flex items-center gap-1.5 cursor-pointer"
+            {/* Guest Name */}
+            <div>
+              <label className="block text-xs font-sans uppercase font-bold text-[#1E3A2B] mb-1">
+                Your Full Name *
+              </label>
+              <input
+                type="text"
+                required
+                placeholder="e.g. Samuel Mutua & Family"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="w-full px-4 py-3 rounded-xl bg-white border border-[#D4A359]/60 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
+              />
+            </div>
+
+            {/* Phone Number */}
+            <div>
+              <label className="block text-xs font-sans uppercase font-bold text-[#1E3A2B] mb-1">
+                Phone Number *
+              </label>
+              <input
+                type="tel"
+                required
+                placeholder="e.g. 0712 345 678"
+                value={formData.phone}
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                className="w-full px-4 py-3 rounded-xl bg-white border border-[#D4A359]/60 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
+              />
+            </div>
+
+            {/* Optional Email Address */}
+            <div>
+              <label className="block text-xs font-sans uppercase font-bold text-[#1E3A2B] mb-1">
+                Email Address <span className="text-gray-500 font-normal text-[11px]">(Optional)</span>
+              </label>
+              <input
+                type="email"
+                placeholder="e.g. samuel@example.com"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className="w-full px-4 py-3 rounded-xl bg-white border border-[#D4A359]/60 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
+              />
+            </div>
+
+            {/* Additional details if attending */}
+            {formData.attending === 'yes' && (
+              <>
+                <div>
+                  <label className="block text-xs font-sans uppercase font-bold text-[#1E3A2B] mb-1">
+                    Number of Guests <span className="text-gray-500 font-normal text-[11px]">(Maximum 2)</span>
+                  </label>
+                  <select
+                    value={formData.guestCount}
+                    onChange={(e) => setFormData({ ...formData, guestCount: Math.min(2, Math.max(1, parseInt(e.target.value) || 1)) })}
+                    className="w-full px-4 py-3 rounded-xl bg-white border border-[#D4A359]/60 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
                   >
-                    {isLookingUp ? (
-                      <>
-                        <Loader2 className="w-3.5 h-3.5 animate-spin text-[#D4A359]" />
-                        <span>Searching...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Search className="w-3.5 h-3.5 text-[#D4A359]" />
-                        <span>Find Pass</span>
-                      </>
-                    )}
-                  </button>
-                </form>
-                {lookupError && (
-                  <div className="p-2.5 bg-red-50 border border-red-200 rounded-xl text-red-700 text-xs flex items-center gap-2">
-                    <AlertCircle className="w-4 h-4 shrink-0" />
-                    <span>{lookupError}</span>
-                  </div>
-                )}
+                    <option value={1}>1 Guest (Myself only)</option>
+                    <option value={2}>2 Guests (Myself + 1 Plus-One)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-sans uppercase font-bold text-[#1E3A2B] mb-1">
+                    Dietary Requirements <span className="text-gray-500 font-normal text-[11px]">(Optional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Vegetarian, Halal, Nut allergy..."
+                    value={formData.dietary}
+                    onChange={(e) => setFormData({ ...formData, dietary: e.target.value })}
+                    className="w-full px-4 py-3 rounded-xl bg-white border border-[#D4A359]/60 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
+                  />
+                </div>
+              </>
+            )}
+
+            {/* Congratulatory Message */}
+            <div>
+              <label className="block text-xs font-sans uppercase font-bold text-[#1E3A2B] mb-1">
+                Warm Message for Virginia & Kenneth
+              </label>
+              <textarea
+                rows={3}
+                placeholder="Share your congratulatory wishes or advice for the couple..."
+                value={formData.message}
+                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                className="w-full px-4 py-3 rounded-xl bg-white border border-[#D4A359]/60 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
+              />
+            </div>
+
+            {/* Error Message */}
+            {errorMessage && (
+              <div className="p-3 bg-red-100 border border-red-300 rounded-xl text-red-700 text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                <span>{errorMessage}</span>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              
-              {/* Attendance Toggle */}
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, attending: 'yes' })}
-                  className={`p-4 rounded-2xl border text-center font-sans text-sm font-bold transition-all ${
-                    formData.attending === 'yes'
-                      ? 'bg-[#1E3A2B] text-[#FDF8F2] border-[#D4A359] shadow-md'
-                      : 'bg-[#F5ECE0]/60 text-[#2C4C3B] border-[#D4A359]/40 hover:bg-[#F5ECE0]'
-                  }`}
-                >
-                  <span className="block text-base">Joyfully Accepts 🎉</span>
-                  <span className="text-[11px] font-normal opacity-80">I will be there to celebrate!</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, attending: 'no' })}
-                  className={`p-4 rounded-2xl border text-center font-sans text-sm font-bold transition-all ${
-                    formData.attending === 'no'
-                      ? 'bg-[#C15C3D] text-white border-[#C15C3D] shadow-md'
-                      : 'bg-[#F5ECE0]/60 text-[#2C4C3B] border-[#D4A359]/40 hover:bg-[#F5ECE0]'
-                  }`}
-                >
-                  <span className="block text-base">Regretfully Declines</span>
-                  <span className="text-[11px] font-normal opacity-80">Sending warm blessings from afar</span>
-                </button>
-              </div>
-
-              {/* Guest Name */}
-              <div>
-                <label className="block text-xs font-sans uppercase font-bold text-[#1E3A2B] mb-1">
-                  Your Full Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Samuel Mutua & Family"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-white border border-[#D4A359]/60 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
-                />
-              </div>
-
-              {/* Phone Number */}
-              <div>
-                <label className="block text-xs font-sans uppercase font-bold text-[#1E3A2B] mb-1">
-                  Phone Number *
-                </label>
-                <input
-                  type="tel"
-                  required
-                  placeholder="e.g. 0712 345 678"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-white border border-[#D4A359]/60 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
-                />
-              </div>
-
-              {/* Optional Email Address */}
-              <div>
-                <label className="block text-xs font-sans uppercase font-bold text-[#1E3A2B] mb-1">
-                  Email Address <span className="text-gray-500 font-normal text-[11px]">(Optional)</span>
-                </label>
-                <input
-                  type="email"
-                  placeholder="e.g. samuel@example.com"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-white border border-[#D4A359]/60 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
-                />
-              </div>
-
-              {/* Additional details if attending */}
-              {formData.attending === 'yes' && (
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full py-3.5 px-6 rounded-2xl bg-[#C15C3D] hover:bg-[#A8482A] text-white font-sans text-sm font-bold shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer"
+            >
+              {isSubmitting ? (
                 <>
-                  <div>
-                    <label className="block text-xs font-sans uppercase font-bold text-[#1E3A2B] mb-1">
-                      Number of Guests <span className="text-gray-500 font-normal text-[11px]">(Maximum 2)</span>
-                    </label>
-                    <select
-                      value={formData.guestCount}
-                      onChange={(e) => setFormData({ ...formData, guestCount: Math.min(2, Math.max(1, parseInt(e.target.value) || 1)) })}
-                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#D4A359]/60 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
-                    >
-                      <option value={1}>1 Guest (Myself only)</option>
-                      <option value={2}>2 Guests (Myself + 1 Plus-One)</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-sans uppercase font-bold text-[#1E3A2B] mb-1">
-                      Dietary Requirements <span className="text-gray-500 font-normal text-[11px]">(Optional)</span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="e.g. Vegetarian, Halal, Nut allergy..."
-                      value={formData.dietary}
-                      onChange={(e) => setFormData({ ...formData, dietary: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-white border border-[#D4A359]/60 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
-                    />
-                  </div>
+                  <Loader2 className="w-4 h-4 animate-spin text-white" />
+                  <span>Submitting to Firebase...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-4 h-4 text-white" />
+                  <span>Submit RSVP Confirmation</span>
                 </>
               )}
+            </button>
 
-              {/* Congratulatory Message */}
-              <div>
-                <label className="block text-xs font-sans uppercase font-bold text-[#1E3A2B] mb-1">
-                  Warm Message for Virginia & Kenneth
-                </label>
-                <textarea
-                  rows={3}
-                  placeholder="Share your congratulatory wishes or advice for the couple..."
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl bg-white border border-[#D4A359]/60 text-sm focus:outline-none focus:ring-2 focus:ring-[#1E3A2B] text-[#1E3A2B]"
-                />
-              </div>
-
-              {/* Error Message */}
-              {errorMessage && (
-                <div className="p-3 bg-red-100 border border-red-300 rounded-xl text-red-700 text-xs flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>{errorMessage}</span>
-                </div>
-              )}
-
-              {/* Success Note */}
-              {successNote && (
-                <div className="p-3 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-800 text-xs flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-600" />
-                  <span>{successNote}</span>
-                </div>
-              )}
-
-              {/* Submit Buttons */}
-              <div className="flex gap-3">
-                {isEditing && (
-                  <button
-                    type="button"
-                    onClick={() => setIsEditing(false)}
-                    className="w-1/3 py-3.5 px-4 rounded-2xl bg-[#FAF6EE] hover:bg-[#F0EAE1] text-[#1E3A2B] border border-[#D4A359]/60 font-sans text-sm font-semibold transition-all cursor-pointer"
-                  >
-                    Cancel
-                  </button>
-                )}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={`${isEditing ? 'w-2/3' : 'w-full'} py-3.5 px-6 rounded-2xl bg-[#C15C3D] hover:bg-[#A8482A] text-white font-sans text-sm font-bold shadow-lg transition-all flex items-center justify-center gap-2 disabled:opacity-60 cursor-pointer`}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin text-white" />
-                      <span>Saving to Firestore...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-4 h-4 text-white" />
-                      <span>{isEditing ? "Update RSVP Confirmation" : "Submit RSVP Confirmation"}</span>
-                    </>
-                  )}
-                </button>
-              </div>
-
-            </form>
-          </div>
+          </form>
         )}
 
         {/* Live Warm Wishes Feed from Guests */}
